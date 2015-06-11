@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "description": "Work in progress.",
 
-  "background": { "scripts": [ "extension/background.js" ] },
+  "background": { "scripts": [ "extension/common.js", "extension/background.js" ] },
 
   "content_scripts": [ {
    "matches": [ "<all_urls>" ],
-   "js": [ "extension/foreground.js" ],
+   "js": [ "extension/common.js", "extension/foreground.js" ],
    "run_at": "document_idle",
    "all_frames": true } ],
 
