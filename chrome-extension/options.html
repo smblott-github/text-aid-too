@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Text-Aid-Too Options</title>
+    <link rel="stylesheet" type="text/css" href="options.css">
+    <script type="text/javascript" src="options.js"></script>
+  </head>
+
+  <body>
+    <div id="wrapper">
+
+      <header>Text-Aid-Too Options</header>
+      <p/> <p/>
+
+      <table id="options">
+        <tr>
+          <td>Port</td><td><input type="text" id="port" value="" /></td>
+        </tr>
+        <tr>
+          <td>Secret</td><td><input type="text" id="secret" value="" /></td>
+        </tr>
+      </table>
+
+      <br />
+      <br />
+
+      <p>
+        Explanation:
+        <ul>
+          <li>
+            There's no need to save.  Option values are saved automatically on change (and synchronised between
+            Chrome instances).
+          </li>
+          <li>
+            Set the port to the port number used by the server.  The default is 9293.
+          </li>
+          <li>
+            If you set a secret for the server (with the <code>TEXT_AID_TOO_SECRET</code> environment variable), then
+            you have to set the same secret here.
+          </li>
+        </ul>
+      </p>
+
+    </div>
+  </body>
+</html>

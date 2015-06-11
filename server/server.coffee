@@ -39,10 +39,9 @@ handler = (ws) -> (message) ->
     callback() for callback in onExit.reverse()
     onExit = []
 
-  console.log secret, request.secret
   if secret?
     unless request.secret? and request.secret == secret
-      console.log "Mismatched or invalid secret; exiting."
+      console.log "Mismatched or invalid secret; exiting:", secret, request.secret
       return exit()
 
   text = request.message

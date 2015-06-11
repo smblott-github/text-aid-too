@@ -5,6 +5,7 @@
   "description": "Work in progress.",
 
   "background": { "scripts": [ "common.js", "background.js" ] },
+  "options_page": "options.html",
 
   "content_scripts": [ {
    "matches": [ "<all_urls>" ],

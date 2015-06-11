@@ -1,0 +1,55 @@
+
+body {
+  font: 14px "DejaVu Sans", "Arial", sans-serif;
+  color: #303942;
+  margin: 0 auto;
+}
+
+div#wrapper {
+  width: 600px;
+  margin-left: 35px;
+}
+
+header {
+  font-size: 18px;
+  font-weight: normal;
+  border-bottom: 1px solid #eee;
+  padding: 20px 0 15px 0;
+  width: 100%;
+}
+
+#options {
+  width: 100%;
+}
+
+ul {
+   list-style-type: none;
+   margin: 0;
+}
+
+li {
+   padding: 5px;
+}
+
+input[type="text"], textarea {
+  border: 1px solid #bfbfbf;
+  border-radius: 2px;
+  color: #444;
+  font: inherit;
+  padding: 3px;
+  width: 100%;
+}
+
+input, textarea {
+  box-sizing: border-box;
+}
+
+button:focus, input[type="text"]:focus, textarea:focus {
+  -webkit-transition: border-color 200ms;
+  border-color: #4d90fe;
+  outline: none;
+}
+
+pre, code, .code {
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
