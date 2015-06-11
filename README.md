@@ -50,7 +50,7 @@ the server.  To enable basic shared-secret security, set the `TEXT_AID_TOO_SECRE
 environment variable.
 
 ```Shell
-TEXT_AID_TOO_SECRET=something-secret text-aid-too
+TEXT_AID_TOO_SECRET="something-secret" text-aid-too
 ```
 
 You will then have to configure the same secret on the extension's options page.
