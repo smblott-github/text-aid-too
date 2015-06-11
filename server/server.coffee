@@ -1,5 +1,8 @@
 #!/usr/bin/env coffee
 
+# Set the environment variable below, and the server will refuse to serve clients who don't know the secret.
+secret = process.env.TEXT_AID_TOO_SECRET
+
 # These must be installed via "npm".
 watchr = require "watchr"
 optimist = require "optimist"
@@ -35,6 +38,12 @@ handler = (ws) -> (message) ->
   exit = ->
     callback() for callback in onExit.reverse()
     onExit = []
+
+  console.log secret, request.secret
+  if secret?
+    unless request.secret? and request.secret == secret
+      console.log "Mismatched or invalid secret; exiting."
+      return exit()
 
   text = request.message
   username = process.env.USER ? "unknown"
