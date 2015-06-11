@@ -13,11 +13,15 @@ child_process = require "child_process"
 config =
   port: "9293"
   host: "localhost"
+  editor: "urxvt -T textaid -geometry 100x30+80+20 -e vim"
 
-args = optimist.usage("Usage: $0 [--port=PORT]")
+args = optimist.usage("Usage: $0 [--port PORT] [--editor EDITOR-COMMAND]")
   .alias("h", "help")
   .default("port", config.port)
+  .default("editor", config.editor)
   .argv
+
+console.log args.editor
 
 if args.help
   optimist.showHelp()
@@ -29,7 +33,7 @@ wss  = new WSS port: args.port, host: config.host
 wss.on "connection", (ws) -> ws.on "message", handler ws
 
 getEditCommand = (filename) ->
-  "urxvt -T textaid -geometry 100x30+80+20 -e vim #{filename}"
+  "#{args.editor} #{filename}"
 
 handler = (ws) -> (message) ->
   request = JSON.parse message

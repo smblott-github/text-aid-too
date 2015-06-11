@@ -1,4 +1,4 @@
-## Text-aid-too
+## Text-Aid-Too
 
 This is functional (I'm using it!) but nevertheless very much a work in progress.
 
@@ -25,6 +25,14 @@ Currently:
   soon).  The extension is in `./chrome-extension/`.
 
 To activate the editor, use `Ctrl-;`
+
+### The Editor Command
+
+Set the editor command as follows:
+
+```Shell
+text-aid-too --editor "urxvt -T textaid -geometry 100x30+80+20 -e vim"
+```
 
 ### Port
 
