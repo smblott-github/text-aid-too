@@ -27,25 +27,32 @@
         Explanation:
         <ul>
           <li>
-            There's no need to save.  Option values are saved automatically on change (and synchronised between
-            Chrome instances).
+            This extension does nothing on its own; you also need to install and run the
+            <code>text-aid-too</code> server.  See the project's home page (linked below) for details.
           </li>
           <li>
-            Set the port to the port number used by the server.  The default is 9293.
+            There's no need to save; just use <code>Escape</code> to blur the inputs above.  Option values are
+            synchronised between Chrome instances.
           </li>
-          <li>
-            If you set a secret for the server (with the <code>TEXT_AID_TOO_SECRET</code> environment variable), then
-            you have to set the same secret here.
-          </li>
-        </ul>
-      </p>
 
-      <p>
-        Note:
-        <ul>
           <li>
-          The binding to launch an editor is <code>Ctrl-;</code>.<br />
-          (Sorry, but there's currently no user interface to change it.)
+            Set <code>Port</code> to the port number used by the server.  The default is <code>9293</code>.
+          </li>
+
+          <li>
+            Set <code>Secret</code> to any secret you provided to the server.  If you provide a secret to the
+            server (via the <code>$TEXT_AID_TOO_SECRET</code> environment variable), then it will ignore
+            requests that don't contain that secret.
+          </li>
+
+          <li>
+            The binding to launch an editor is <code>Ctrl-;</code>.<br />
+            (Sorry, but there's currently no user interface to change it.)
+          </li>
+
+          <li>
+            Please provide feedback and comments on the project's <a
+              href="https://github.com/smblott-github/text-aid-too#text-aid-too" target="_blank">home page</a>.
           </li>
         </ul>
       </p>
