@@ -1,9 +1,15 @@
 
+# These must be installed via "npm".
+watchr = require "watchr"
+optimist = require "optimist"
+
+fs = require "fs"
+child_process = require "child_process"
+
 config =
   port: "9293"
   host: "localhost"
 
-optimist = require "optimist"
 args = optimist.usage("Usage: $0 [--port=PORT]")
   .alias("h", "help")
   .default("port", config.port)
@@ -15,13 +21,45 @@ if args.help
 
 WSS  = require("ws").Server
 wss  = new WSS port: args.port, host: args.host
+wss.on "connection", (ws) -> ws.on "message", handler ws
 
-wss.on "connection",
-  (ws) ->
-    ws.on "message", handler ws
+getEditCommand = (filename) ->
+  "urxvt -T textaid -geometry 100x30+80+20 -e vim #{filename}"
 
 handler = (ws) -> (message) ->
   request = JSON.parse message
-  request.text = "server"
-  ws.send JSON.stringify request
+
+  onExit = []
+  onExit.push -> ws.close()
+  exit = ->
+    callback() for callback in onExit.reverse()
+    onExit = []
+
+  text = request.message
+  username = process.env.USER ? "unknown"
+  directory = process.env.TMPDIR ? "/tmp"
+  timestamp = process.hrtime().join "-"
+  suffix = if request.isContentEditable then "html" else "txt"
+  filename = "#{directory}/#{username}-text-aid-too-#{timestamp}.#{suffix}"
+
+  fs.writeFile filename, request.text, (error) ->
+    return exit() if error
+    onExit.push -> fs.unlink filename
+
+    sendText = (continuation = null) ->
+      fs.readFile filename, "utf8", (error, data) ->
+        return exit() if error
+        request.text = data
+        ws.send JSON.stringify request
+        continuation?()
+
+    monitor = watchr.watch
+      path: filename
+      listener: sendText
+    onExit.push -> monitor.close()
+
+    child = child_process.exec getEditCommand filename
+    child.on "exit", (error) ->
+      return exit() if error
+      sendText exit
 
