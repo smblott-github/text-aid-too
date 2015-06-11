@@ -1,3 +1,4 @@
+#!/usr/bin/env coffee
 
 # These must be installed via "npm".
 watchr = require "watchr"

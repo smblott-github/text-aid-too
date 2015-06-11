@@ -1,0 +1,13 @@
+{
+   "name": "text-aid-too",
+   "version": "1.0.0",
+   "author": "Stephen Blott <smblott@gmail.com>",
+   "description": "Yet another text aid extension, but with a couple of nice tweaks!",
+   "homepage": "https://github.com/smblott-github/text-aid-too",
+   "repository": { "type": "git", "url": "https://github.com/smblott-github/text-aid-too" },
+   "licenses" : [ {"type" : "MIT" } ],
+   "engines" : { "node" : ">=0.4" },
+   "keywords": [ "text", "aid", "extension", "chrome", "edit", "vim" ],
+   "dependencies": { "ws" :  "*", "optimist" :  "*", "watchr": "*", "coffee-script": "*" },
+   "bin": { "text-aid-too": "server/server.coffee" }
+}
