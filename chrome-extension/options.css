@@ -52,4 +52,5 @@ button:focus, input[type="text"]:focus, textarea:focus {
 
 pre, code, .code {
   font-family: Consolas, "Liberation Mono", Courier, monospace;
+  background: #eeeeee;
 }

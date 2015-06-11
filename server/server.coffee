@@ -23,8 +23,9 @@ if args.help
   optimist.showHelp()
   process.exit(0)
 
+console.log "Listening on: ws://#{config.host}:#{args.port}."
 WSS  = require("ws").Server
-wss  = new WSS port: args.port, host: args.host
+wss  = new WSS port: args.port, host: config.host
 wss.on "connection", (ws) -> ws.on "message", handler ws
 
 getEditCommand = (filename) ->
@@ -50,6 +51,7 @@ handler = (ws) -> (message) ->
   timestamp = process.hrtime().join "-"
   suffix = if request.isContentEditable then "html" else "txt"
   filename = "#{directory}/#{username}-text-aid-too-#{timestamp}.#{suffix}"
+  console.log filename
 
   fs.writeFile filename, request.text, (error) ->
     return exit() if error

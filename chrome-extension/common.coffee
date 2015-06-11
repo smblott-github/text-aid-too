@@ -1,5 +1,17 @@
 
 Common =
+
+  # Default values.
+  default:
+    key:
+      altKey: false
+      ctrlKey: true
+      shiftKey: false
+      keyCode: 186 # ";"
+
+    port: "9293"
+    secret: "BETTER-FIX-ME-ON-THE-OPTIONS-PAGE"
+
   # Give objects (including elements) distinct identities.
   identity: do ->
     identities = []
@@ -17,12 +29,10 @@ Common =
   # Like Nodejs's nextTick.
   nextTick: (func) -> @setTimeout 0, func
 
-  default:
-    key:
-      altKey: false
-      ctrlKey: true
-      shiftKey: false
-      keyCode: 186 # ";"
+  # Extend an object with additional properties.
+  extend: (hash1, hash2) ->
+    hash1[key] = value for own key, value of hash2
+    hash1
 
 root = exports ? window
 root.Common = Common

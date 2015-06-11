@@ -1,44 +1,43 @@
 
-port = null
-secret = null
-
 chrome.storage.sync.get "key", (items) ->
   unless chrome.runtime.lastError
     unless items.key?
       chrome.storage.sync.set key: Common.default.key
 
-getOrSet = (key, value, callback) ->
+getOrSet = (key, value, callback = null) ->
   chrome.storage.sync.get key, (items) ->
     unless chrome.runtime.lastError
       if items[key]?
-        callback items[key]
+        callback? items[key]
       else
         obj = {}
         obj[key] = value
         chrome.storage.sync.set obj
-        callback value
+        callback? value
 
-getOrSet "port", "9293", (value) -> port = parseInt value
-getOrSet "secret", "BETTER-FIX-ME-ON-THE-OPTIONS-PAGE", (value) -> secret = value
+getOrSet "port", Common.default.port
+getOrSet "secret", Common.default.secret
 
 launchEdit = (request) ->
-  socket = new WebSocket "ws://localhost:#{port}/"
+  getOrSet "port", Common.default.port, (port) ->
+    port = parseInt port
 
-  socket.onerror = -> socket.close()
-  socket.onclose = -> socket.close()
+    getOrSet "secret", Common.default.secret, (secret) ->
+      request.secret = secret
+      socket = new WebSocket "ws://localhost:#{port}/"
+      console.log port, secret
 
-  socket.onopen = ->
-    socket.send JSON.stringify request
+      socket.onerror = -> socket.close()
+      socket.onclose = -> socket.close()
 
-  socket.onmessage = (message) ->
-    response = JSON.parse message.data
-    chrome.tabs.sendMessage response.tabId, response
+      socket.onopen = ->
+        socket.send JSON.stringify request
+
+      socket.onmessage = (message) ->
+        response = JSON.parse message.data
+        chrome.tabs.sendMessage response.tabId, response
 
 chrome.runtime.onMessage.addListener (request, sender) ->
-  return unless sender.tab?.id?
-  request.tabId = sender.tab.id
-  request.secret = secret
-  switch request.name
-    when "edit"
-      launchEdit request
+  if sender.tab?.id?
+    launchEdit Common.extend request, tabId: sender.tab.id
   false
