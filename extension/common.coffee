@@ -18,7 +18,7 @@ Common =
   nextTick: (func) -> @setTimeout 0, func
 
   default:
-    server: "http://localhost:9293"
+    server: "localhost:9293"
     key:
       altKey: false
       ctrlKey: true

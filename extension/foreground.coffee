@@ -2,10 +2,6 @@
 key = null
 frame = 1 + Math.floor 999999999 * Math.random()
 
-chrome.storage.sync.get "key", (items) ->
-  key = items.key
-  console.log key
-
 isTriggerEvent = do ->
   properties = [ "altKey", "ctrlKey", "shiftKey", "keyCode" ]
 
@@ -49,10 +45,13 @@ getElement = do ->
 installListener = (element, event, callback) ->
   element.addEventListener event, callback, true
 
-installListener window, "keydown", (event) ->
-  return true unless isTriggerEvent event
-  return true unless element = getElement()
-  event.preventDefault()
-  event.stopImmediatePropagation()
-  editElement element
-  false
+chrome.storage.sync.get "key", (items) ->
+  key = items.key
+
+  installListener window, "keydown", (event) ->
+    return true unless isTriggerEvent event
+    return true unless element = getElement()
+    event.preventDefault()
+    event.stopImmediatePropagation()
+    editElement element
+    false
