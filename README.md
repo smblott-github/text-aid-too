@@ -55,7 +55,3 @@ TEXT_AID_TOO_SECRET="something-secret" text-aid-too
 
 You will then have to configure the same secret on the extension's options page.
 
-### Caveats
-
-There's no configuration page at the moment.  Pretty much everything is hard
-wired, including the editor command. YMMV.  But check back.  Those details will be fixed soon.
