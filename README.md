@@ -26,6 +26,11 @@ Currently:
 
 To activate the editor, use `Ctrl-;`
 
+### Important
+
+*Text-aid-too* will not work with other text-aid servers.  It doesn't use HTTP,
+it uses its own a web-socket based protocol instead.
+
 ### The Editor Command
 
 Set the editor command as follows:
