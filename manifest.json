@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "Text-Aid Too",
+  "version": "1.0.0",
+  "description": "Work in progress.",
+
+  "background": { "scripts": [ "extension/background.js" ] },
+
+  "content_scripts": [ {
+   "matches": [ "<all_urls>" ],
+   "js": [ "extension/foreground.js" ],
+   "run_at": "document_idle",
+   "all_frames": true } ],
+
+  // "options_page": "options.html",
+  "permissions": [ "storage" ]
+}
