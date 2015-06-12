@@ -3,8 +3,8 @@
 # Set the environment variable below, and the server will refuse to serve clients who don't know the secret.
 secret = process.env.TEXT_AID_TOO_SECRET
 
-# The first two of these must be installed via "npm".
-for module in [ "watchr", "optimist", "fs", "child_process" ]
+# The first three of these must be installed via "npm".
+for module in [ "watchr", "optimist", "ws", "fs", "child_process" ]
   try
     global[module] = require module
   catch
@@ -50,7 +50,7 @@ if args.help
 console.log "editor: #{args.editor}"
 console.log "server: ws://#{config.host}:#{args.port}"
 
-WSS  = require("ws").Server
+WSS  = ws.Server
 wss  = new WSS port: args.port, host: config.host
 wss.on "connection", (ws) -> ws.on "message", handler ws
 
@@ -68,7 +68,11 @@ handler = (ws) -> (message) ->
 
   if secret? and 0 < secret.length
     unless request.secret? and request.secret == secret
-      console.log "Mismatched or invalid secret; exiting:", secret, request.secret
+      console.log """
+        mismatched or invalid secret; aborting request:
+          required secret: #{secret}
+          received secret: #{request.secret}
+        """
       return exit()
 
   text = request.message
