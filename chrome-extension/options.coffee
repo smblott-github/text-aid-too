@@ -16,7 +16,7 @@ document.addEventListener "DOMContentLoaded", ->
   maintainServerCommand = ->
     command = "\n"
     command += " export TEXT_AID_TOO_SECRET=\"#{escape secretElement.value.trim()}\"\n" if secretElement.value.trim()
-    command += " text-aid-to --port #{portElement.value.trim()}\n"
+    command += " text-aid-too --port #{portElement.value.trim()}\n"
     command += "\n"
     commandElement.textContent = command
 
