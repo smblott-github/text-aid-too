@@ -33,10 +33,6 @@ pack-extension:
 
 .PHONY: build auto pack-extension run-server install fast-install
 
-# pack:
-# 	cd .. && \
-# 	   zip -r chrome-new-tab-url.zip chrome-new-tab-url \
-# 	   	-x chrome-new-tab-url/.git'*' \
-# 		-x chrome-new-tab-url/'*'.coffee \
-# 		-x chrome-new-tab-url/'*'.md \
-# 		-x chrome-new-tab-url/Makefile
+pack:
+	$(MAKE) build
+	zip -r text-aid-too.zip chrome-extension -x '*'.coffee
