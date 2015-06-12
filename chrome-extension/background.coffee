@@ -1,9 +1,4 @@
 
-chrome.storage.sync.get "key", (items) ->
-  unless chrome.runtime.lastError
-    unless items.key?
-      chrome.storage.sync.set key: Common.default.key
-
 getOrSet = (key, value, callback = null) ->
   chrome.storage.sync.get key, (items) ->
     unless chrome.runtime.lastError
@@ -15,8 +10,8 @@ getOrSet = (key, value, callback = null) ->
         chrome.storage.sync.set obj
         callback? value
 
-getOrSet "port", Common.default.port
-getOrSet "secret", Common.default.secret
+for key in [ "key", "port", "secret" ]
+  getOrSet key, Common.default[key]
 
 launchEdit = (request) ->
   getOrSet "port", Common.default.port, (port) ->
@@ -24,11 +19,10 @@ launchEdit = (request) ->
 
     getOrSet "secret", Common.default.secret, (secret) ->
       request.secret = secret
-      socket = new WebSocket "ws://localhost:#{port}/"
       console.log port, secret
 
-      socket.onerror = -> socket.close()
-      socket.onclose = -> socket.close()
+      socket = new WebSocket "ws://localhost:#{port}/"
+      socket.onerror = socket.onclose = -> socket.close()
 
       socket.onopen = ->
         socket.send JSON.stringify request

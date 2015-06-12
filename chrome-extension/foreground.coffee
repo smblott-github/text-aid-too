@@ -1,13 +1,13 @@
 
-key = null
 frame = 1 + Math.floor 999999999 * Math.random()
 
+# Tests whether this text-aid-too's trigger event.
 isTriggerEvent = do ->
   properties = [ "altKey", "ctrlKey", "shiftKey", "keyCode" ]
 
-  (event) ->
+  (key, event) ->
     for property in properties
-      return false unless key? and event[property] == key[property]
+      return false unless event[property] == key[property]
     true
 
 getElementContent = (element) ->
@@ -16,6 +16,7 @@ getElementContent = (element) ->
 setElementContent = (element, text) ->
   if element.isContentEditable then element.innerHTML = text else element.value = text
 
+# Send a request to edit text.
 editElement = (element) ->
   chrome.runtime.sendMessage
     name: "edit"
@@ -24,12 +25,13 @@ editElement = (element) ->
     id: Common.identity.getId element
     frame: frame
 
+# Receive edited text.
 chrome.runtime.onMessage.addListener (request, sender) ->
-  return false unless request.frame == frame
-  element = Common.identity.getObj request.id
-  setElementContent element, request.text
+  if request.frame == frame and element = Common.identity.getObj request.id
+    setElementContent element, request.text
   false
 
+# Returns the active element (if it is editable) or null.
 getElement = do ->
   nonEditableInputs = [ "radio", "checkbox" ]
   editableNodeNames = [ "textarea" ]
@@ -46,12 +48,20 @@ installListener = (element, event, callback) ->
   element.addEventListener event, callback, true
 
 chrome.storage.sync.get "key", (items) ->
-  key = items.key
+  unless chrome.runtime.lastError
+    key = items.key
 
-  installListener window, "keydown", (event) ->
-    return true unless isTriggerEvent event
-    return true unless element = getElement()
-    event.preventDefault()
-    event.stopImmediatePropagation()
-    editElement element
-    false
+    # This is the main keyboard-event listener.  We check on every keydown because some sites (notably
+    # Google's Inbox) change the content-editable flag on the fly.
+    installListener window, "keydown", (event) ->
+      if isTriggerEvent(key, event) and element = getElement()
+        event.preventDefault()
+        event.stopImmediatePropagation()
+        editElement element
+        return false
+      true
+
+    chrome.storage.onChanged.addListener (changes, area) =>
+      if area == "sync" and changes.key?.newValue?
+        key = changes.key.newValue
+
