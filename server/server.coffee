@@ -1,21 +1,34 @@
 #!/usr/bin/env coffee
 
 # Required modules:
-#   npm install -g watchr
-#   npm install -g optimist
-#   npm install -g es
-#   npm install -g coffee-script
+#   npm install watchr
+#   npm install optimist
+#   npm install ws
+#   npm install markdown
+#   npm install html
+#   npm install coffee-script
 
 # Set the environment variable below, and the server will refuse to serve clients who don't know the secret.
 secret = process.env.TEXT_AID_TOO_SECRET
 
-# The first three of these must be installed via "npm".
-for module in [ "watchr", "optimist", "ws", "fs", "child_process" ]
+for module in [
+  # The first of these must be installed via "npm".
+  "watchr"
+  "optimist"
+  "ws"
+  "markdown"
+  "html"
+  # These are standard.
+  "fs"
+  "child_process"
+  ]
   try
     global[module] = require module
   catch
     console.log "ERROR\n#{module} is not available: sudo npm install -g #{module}"
     process.exit 1
+
+console.log html
 
 config =
   port: "9293"
@@ -34,15 +47,15 @@ version = pjson.version
 helpText =
   """
   Usage:
-    text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--auto-paragraph]
+    text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--markdown]
 
   Example:
     export TEXT_AID_TOO_EDITOR="gvim"
     TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293
 
-  Auto-paragraph:
-    With the "--auto-paragraph" flag, text-aid-too tries to find naked text
-    paragraphs in HTML texts and wraps them with <p></p> tags.  This only
+  Markdown
+    With the "--markdown" flag, text-aid-too tries to find naked text
+    paragraphs in HTML texts and parses them as markdown.  This only
     applies to texts from contentEditable elements.
 
   Environment variables:
@@ -56,7 +69,7 @@ args = optimist.usage(helpText)
   .alias("h", "help")
   .default("port", config.port)
   .default("editor", defaultEditor)
-  .default("auto-paragraph", false)
+  .default("markdown", false)
   .argv
 
 if args.help
@@ -109,7 +122,7 @@ handler = (ws) -> (message) ->
       fs.readFile filename, "utf8", (error, data) ->
         return exit() if error
         console.log "  send:", filename
-        data = wrapParagraphs data if args["auto-paragraph"] and request.isContentEditable
+        data = parseMarkdown data if args.markdown and request.isContentEditable
         request.text = data
         ws.send JSON.stringify request
         continuation?()
@@ -129,6 +142,22 @@ handler = (ws) -> (message) ->
     child.on "exit", (error) ->
       return exit() if error
       sendText exit
+
+parseMarkdown = (text) ->
+  paragraphs =
+    for paragraph in text.split "\n\n"
+      paragraph = paragraph.trim()
+      isHTML = /.*>$/
+      if paragraph.length == 0 or isHTML.test paragraph
+        paragraph
+      else
+        try
+          text = html.prettyPrint markdown.markdown.toHTML paragraph
+          text.replace(/<p>/g, "<p>\n").replace(/<\/p>/g, "\n<\/p>")
+        catch
+          console.log "markdown/html processing failed (that's all I know!)."
+          paragraph
+  paragraphs.join "\n\n"
 
 wrapParagraphs = (text) ->
   paragraphs = text.split "\n\n"
