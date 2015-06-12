@@ -1,5 +1,11 @@
 #!/usr/bin/env coffee
 
+# Required modules:
+#   npm install -g watchr
+#   npm install -g optimist
+#   npm install -g es
+#   npm install -g coffee-script
+
 # Set the environment variable below, and the server will refuse to serve clients who don't know the secret.
 secret = process.env.TEXT_AID_TOO_SECRET
 

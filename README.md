@@ -21,18 +21,46 @@ But *Text-aid-too* is different:
 
 ### Installation
 
-Currently:
-- Clone the repo.
-- Install the server with `npm install -g .`.
-- Run the server with `text-aid-too`.
-- Build the extension with `coffee -c ./chrome-extension/*.coffee` (or just `make build`).
-- Install the extension as an unpacked extension (I'll put it on the Chrome Store
-  soon).  The extension is in `./chrome-extension/`.
+#### The Easy Way
+
+1. Install the [extension](https://chrome.google.com/webstore/detail/klbcooigafjpbiahdjccmajnaehomajc) from the Chrome Store.
+1. Install the server (and its dependencies):
+
+    `sudo npm install -g text-aid-too`
+
+1. Configure the port and shared secret on the extension's options page
+   (optional, but required if you want to use a non-default port or a shared
+   secret).
+
+
+Then, launch the server; which might be something like...
+
+    export TEXT_AID_TOO_SECRET="<REPLACE-ME>"
+    export TEXT_AID_TOO_EDITOR="gvim"
+
+    # Use the default port (9293)...
+    text-aid-server
+
+    # Or...
+    text-aid-server --port 9294
+
+
+To activate the editor, use `<Ctrl-;>` in a web input. (Sorry, there's no
+user interface yet for changing this.)
+
+#### The hard way
+
+1. Clone the repo.
+1. Install the server with `npm install -g .`.
+1. Run the server (as above).
+1. Build the extension with  `make build`.  (You will need Coffeescript.)
+1. Install the extension as an unpacked extension; it's in `./chrome-extension`.
 
     Visit the extension's options page to configure the port and shared secret,
     if required (see below).
 
-    To activate the editor, use `<Ctrl-;>`. (Sorry, there's no user interface yet for changing this.)
+To activate the editor, use `<Ctrl-;>` in a web input. (Sorry, there's no
+user interface yet for changing this.)
 
 ### Important
 
