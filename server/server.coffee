@@ -51,10 +51,11 @@ helpText =
     export TEXT_AID_TOO_EDITOR="gvim"
     TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293
 
-  Markdown
+  Markdown (experimental):
     With the "--markdown" flag, text-aid-too tries to find naked text
     paragraphs in HTML texts and parses them as markdown.  This only
-    applies to texts from contentEditable elements.
+    applies to texts from contentEditable elements (e.g. the GMail
+    compose window).
 
   Environment variables:
     TEXT_AID_TOO_EDITOR: the editor command to use.

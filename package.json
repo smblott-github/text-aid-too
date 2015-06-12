@@ -1,19 +1,20 @@
 {
    "name": "text-aid-too",
-   "version": "1.0.4",
+   "version": "1.0.5",
    "author": "Stephen Blott <smblott@gmail.com>",
-   "description": "Edit web inputs (including on GMail) with your favourite native text editor.",
+   "description": "Edit web inputs (including on GMail) with your favourite native text editor; and (experimentally) use markdown.",
    "homepage": "https://github.com/smblott-github/text-aid-too",
    "repository": { "type": "git", "url": "https://github.com/smblott-github/text-aid-too" },
    "licenses" : [ {"type" : "MIT" } ],
    "engines" : { "node" : ">=0.4" },
    "keywords": [ "text", "aid", "extension", "chrome", "edit", "vim" ],
    "dependencies": {
-      "ws" :  "*",
-      "optimist" :  "*",
-      "watchr": "*",
-      "coffee-script": "*",
-      "markdown": "*"
+      "ws" : "~0.4.31",
+      "optimist" : "~0.6.1",
+      "watchr": "~2.4.13",
+      "coffee-script": "~1.9.3",
+      "markdown": "~0.5.0",
+      "html": "~0.0.10"
    },
    "bin": { "text-aid-too": "server/server.coffee" }
 }
