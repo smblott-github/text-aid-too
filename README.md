@@ -26,7 +26,8 @@ Currently:
 - Install the extension as an unpacked extension (I'll put it on the Chrome Store
   soon).  The extension is in `./chrome-extension/`.
 
-    Visit the extension's options page to configure the port and shared secret to use.
+    Visit the extension's options page to configure the port and shared secret,
+    if required (see below).
 
     To activate the editor, use `<Ctrl-;>`. (Sorry, there's no user interface yet for changing this.)
 
