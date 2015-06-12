@@ -44,3 +44,46 @@ document.addEventListener "DOMContentLoaded", ->
             element.blur() if event.keyCode == 27
 
           element.addEventListener "keyup", maintainServerCommand
+
+  chrome.storage.sync.get "key", (items) ->
+    unless chrome.runtime.lastError
+      batchUpdate = false
+      keys = [ "ctrlKey", "altKey", "shiftKey" ]
+      key = items.key
+
+      $("keyCode").textContent = key.keyCode
+      $("setKey").value = "Set keyboard shortcut"
+
+      saveKey = ->
+        newKey = {}
+        newKey[k] = $(k).checked for k in keys
+        newKey.keyCode = parseInt $("keyCode").textContent
+        chrome.storage.sync.set key: newKey
+
+      for k in keys
+        do (k) ->
+          $(k).checked = key[k]
+          $(k).addEventListener "change", ->
+            saveKey() unless batchUpdate
+
+      $("setKey").addEventListener "click", ->
+        $("setKey").disabled = true
+        $("setKey").value = "Type your keyboard shortcut..."
+
+        cancel = ->
+          window.removeEventListener "keydown", keydown
+          window.removeEventListener "keyup", keyup
+          $("setKey").disabled = false
+          $("setKey").value = "Set keyboard shortcut"
+
+        window.addEventListener "keydown", keydown = (event) ->
+          if event.keyCode not in [16..18] # Ctrl, Alt and Shift.
+            batchUpdate = true
+            $(k).checked = event[k] for k in keys
+            $("keyCode").textContent = event.keyCode
+            saveKey()
+            batchUpdate = false
+            cancel()
+
+        window.addEventListener "keyup", keyup = -> cancel()
+

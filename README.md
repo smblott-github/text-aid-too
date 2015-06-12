@@ -13,7 +13,10 @@ But *Text-aid-too* is different:
   preview your changes as you go along.
 - The temporary file name has the appropriate suffix for the input type (`.txt`
   or `.html`, as appropriate).  Therefore, your text editor can detect the file
-  type and set its bindings and highlighting accordingly.
+  type and set its bindings and the like accordingly.
+
+The default keyboard shortcut is `<Ctrl-;>`, but you can set your own keyboard
+shortcut on the extension's options page.
 
 ### Screenshot
 
@@ -44,10 +47,6 @@ Then, launch the server; which might be something like...
     # Or...
     text-aid-server --port 9294
 
-
-To activate the editor, use `<Ctrl-;>` in a web input. (Sorry, there's no
-user interface yet for changing this.)
-
 #### The hard way
 
 1. Clone the repo.
@@ -58,9 +57,6 @@ user interface yet for changing this.)
 
     Visit the extension's options page to configure the port and shared secret,
     if required (see below).
-
-To activate the editor, use `<Ctrl-;>` in a web input. (Sorry, there's no
-user interface yet for changing this.)
 
 ### Important
 

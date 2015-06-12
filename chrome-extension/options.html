@@ -14,10 +14,40 @@
 
       <table id="options">
         <tr>
-          <td>Port</td><td><input type="number" id="port" value="" /></td>
+          <td class="optionName">Port</td><td><input type="number" id="port" value="" /></td>
         </tr>
         <tr>
-          <td>Secret</td><td><input type="text" id="secret" value="" /></td>
+          <td class="optionName">Secret</td><td><input type="text" id="secret" value="" /></td>
+        </tr>
+        <tr>
+          <td class="optionName">Keyboard shortcut</td>
+          <td>
+            <input type="checkbox" id="ctrlKey" value="false" /><code>Control</code>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input type="checkbox" id="altKey" value="false" /><code>Alt</code>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input type="checkbox" id="shiftKey" value="false" /><code>Shift</code>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <span id="keyCode"></span>&nbsp;<code>keyCode</code>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input type="button" id="setKey" value="Set Key" />
+          </td>
         </tr>
       </table>
 
@@ -54,8 +84,8 @@
           </li>
 
           <li>
-            The binding to launch an editor is <code>&lt;Ctrl-;&gt;</code>.<br />
-            (Sorry, but there's currently no user interface to change it.)
+            The default keyboard shortcut is <code>&lt;Ctrl-;&gt;</code>, but you can set your own shortcut
+            above.
           </li>
 
           <li>

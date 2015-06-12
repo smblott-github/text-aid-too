@@ -40,6 +40,10 @@ input[type="text"], input[type="number"], textarea {
   width: 100%;
 }
 
+.optionName {
+   max-width: 65px;
+}
+
 input, textarea {
   box-sizing: border-box;
 }
