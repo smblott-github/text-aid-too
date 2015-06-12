@@ -82,6 +82,55 @@ console.log """
   version #{version}
   """
 
+# A simple cache. Entries used within two expiry periods are retained, otherwise they are discarded.
+# At most 2 * @entries entries are retained.
+class SimpleCache
+  # expiry: expiry time in milliseconds (default, one hour)
+  # entries: maximum number of entries in @cache (there may be up to this many entries in @previous, too)
+  constructor: (@expiry = 60 * 60 * 1000, @entries = 1000) ->
+    @cache = {}
+    @previous = {}
+    @lastRotation = new Date()
+
+  has: (key) ->
+    @rotate()
+    (key of @cache) or key of @previous
+
+  # Set value, and return that value.  If value is null, then delete key.
+  set: (key, value = null) ->
+    @rotate()
+    delete @previous[key]
+    if value?
+      @cache[key] = value
+    else
+      delete @cache[key]
+      null
+
+  get: (key) ->
+    @rotate()
+    if key of @cache
+      @cache[key]
+    else if key of @previous
+      @cache[key] = @previous[key]
+      delete @previous[key]
+      @cache[key]
+    else
+      null
+
+  rotate: (force = false) ->
+    if force or @entries < Object.keys(@cache).length or @expiry < new Date() - @lastRotation
+      console.log "rotating reverse cache"
+      @lastRotation = new Date()
+      @previous = @cache
+      @cache = {}
+
+  clear: ->
+    @rotate true
+    @rotate true
+
+reverseCache = new SimpleCache 1000 * 60 * 60, 50
+getCacheKey = (data) -> data.trim().split(/\s+/).join " "
+
 WSS  = ws.Server
 wss  = new WSS port: args.port, host: config.host
 wss.on "connection", (ws) -> ws.on "message", handler ws
@@ -116,6 +165,11 @@ handler = (ws) -> (message) ->
   console.log "edit:", filename
   onExit.push -> console.log "  done:", filename
 
+  cacheKey = getCacheKey request.text
+  if reverseCache.has cacheKey
+    request.text = reverseCache.get cacheKey
+  cacheKey = null
+
   fs.writeFile filename, request.text, (error) ->
     return exit() if error
     onExit.push -> fs.unlink filename
@@ -124,8 +178,14 @@ handler = (ws) -> (message) ->
       fs.readFile filename, "utf8", (error, data) ->
         return exit() if error
         console.log "  send:", filename
-        data = formatParagraphs data if request.isContentEditable
-        request.text = data
+        request.text =
+          if request.isContentEditable
+            formattedData = formatParagraphs data
+            formattedKey = getCacheKey formattedData
+            reverseCache.set getCacheKey(formattedData), data
+            formattedData
+          else
+            data
         ws.send JSON.stringify request
         continuation?()
 
