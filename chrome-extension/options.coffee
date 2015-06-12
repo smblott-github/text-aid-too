@@ -11,10 +11,10 @@ document.addEventListener "DOMContentLoaded", ->
     str = str.replace /"/g, "\\\""
 
   maintainServerCommand = ->
-    command = ""
-    command += "TEXT_AID_TOO_SECRET=\"#{escape secretElement.value.trim()}\""
-    command += " text-aid-to"
-    command += " --port #{portElement.value.trim()}"
+    command = "\n"
+    command += " export TEXT_AID_TOO_SECRET=\"#{escape secretElement.value.trim()}\"\n" if secretElement.value.trim()
+    command += " text-aid-to --port #{portElement.value.trim()}\n"
+    command += "\n"
     commandElement.textContent = command
 
   chrome.storage.sync.get [ "port", "secret" ], (items) ->
