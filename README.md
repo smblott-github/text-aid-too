@@ -4,7 +4,6 @@
 web inputs in your native text editor, such as Vim or Emacs.  It's a
 combination of a Chrome extension and a server.
 
-
 But *Text-aid-too* is different:
 - In addition to traditional HTML inputs, it also works for `contentEditable`
   inputs (such as those used by GMail).
@@ -15,6 +14,10 @@ But *Text-aid-too* is different:
 - The temporary file name has the appropriate suffix for the input type (`.txt`
   or `.html`, as appropriate).  Therefore, your text editor can detect the file
   type and set its bindings and highlighting accordingly.
+
+### Screenshot
+
+![Screenshot](https://cloud.githubusercontent.com/assets/2641335/8124943/cd7c5ffe-10d8-11e5-8403-e14d18dc482d.png)
 
 ### Installation
 
