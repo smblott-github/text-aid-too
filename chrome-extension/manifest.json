@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Text-Aid Too",
-  "version": "1.0.0",
-  "description": "Work in progress.",
+  "name": "Text-Aid-Too",
+  "version": "1.0.1",
+  "description": "Edit web inputs (including on GMail) with your favourite native text editor.",
 
   "background": { "scripts": [ "common.js", "background.js" ] },
   "options_page": "options.html",

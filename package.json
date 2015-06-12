@@ -1,8 +1,8 @@
 {
    "name": "text-aid-too",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "author": "Stephen Blott <smblott@gmail.com>",
-   "description": "Yet another text aid extension, but with a couple of nice tweaks!",
+   "description": "Edit web inputs (including on GMail) with your favourite native text editor.",
    "homepage": "https://github.com/smblott-github/text-aid-too",
    "repository": { "type": "git", "url": "https://github.com/smblott-github/text-aid-too" },
    "licenses" : [ {"type" : "MIT" } ],
