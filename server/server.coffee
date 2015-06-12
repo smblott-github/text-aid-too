@@ -75,8 +75,12 @@ if args.help
   optimist.showHelp()
   process.exit(0)
 
-console.log "editor: #{args.editor}"
-console.log "server: ws://#{config.host}:#{args.port}"
+console.log """
+  server  ws://#{config.host}:#{args.port}
+  secret  #{if secret? then secret else '<NONE>'}
+  editor  #{args.editor}
+  version #{version}
+  """
 
 WSS  = ws.Server
 wss  = new WSS port: args.port, host: config.host
