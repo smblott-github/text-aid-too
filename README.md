@@ -102,29 +102,42 @@ You'll then have to configure the same secret on the extension's options page, o
 
 (You cannot set the shared secret on the command line, for obvious reasons.)
 
+### Markdown
+
+*Note: this is an experimental feature.*
+
+With the `--markdown` flag, the server parses non-HTML paragraphs as Markdown
+(but only for text from `contentEditable` elements).  For example, you can use
+Markdown to write messages in GMail.
+
+![Markdown in GMail](https://cloud.githubusercontent.com/assets/2641335/8130117/dc12f86e-1107-11e5-9893-45ce83ed99b5.png).
+
 ### Help Text
 
 At the time of writing, the help text is...
 
 ```
 Usage:
-  text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--auto-paragraph]
+  text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--markdown]
 
 Example:
   export TEXT_AID_TOO_EDITOR="gvim"
   TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293
 
-Auto-paragraph:
-  With the "--auto-paragraph" flag, text-aid-too tries to find naked text
-  paragraphs in HTML texts and wraps them with <p></p> tags.  This only
-  applies to texts from contentEditable elements.
+Markdown (experimental):
+  With the "--markdown" flag, text-aid-too tries to find naked text
+  paragraphs in HTML texts and parses them as markdown.  This only
+  applies to texts from contentEditable elements (e.g. the GMail
+  compose window).
 
 Environment variables:
   TEXT_AID_TOO_EDITOR: the editor command to use.
   TEXT_AID_TOO_SECRET: the shared secret; set this in the extension too.
 
+Version: 1.0.5
+
 Options:
-  --port            [default: "9293"]
-  --editor          [default: "urxvt -T textaid -geometry 100x30+80+20 -e vim"]
-  --auto-paragraph  [default: false]
+  --port      [default: "9293"]
+  --editor    [default: "urxvt -T textaid -geometry 100x30+80+20 -e vim"]
+  --markdown  [default: false]
 ```
