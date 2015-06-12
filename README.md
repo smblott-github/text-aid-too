@@ -23,7 +23,7 @@ Currently:
 - Install the server with `npm install -g .`.
 - Run the server with `text-aid-too`.
 - Build the extension with `coffee -c ./chrome-extension/*.coffee` (or just `make build`).
-- Install the server as an unpacked extension (I'll put it on the Chrome Store
+- Install the extension as an unpacked extension (I'll put it on the Chrome Store
   soon).  The extension is in `./chrome-extension/`.
 
     Visit the extension's options page to configure the port and shared secret to use.
