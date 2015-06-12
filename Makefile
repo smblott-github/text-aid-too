@@ -26,8 +26,14 @@ pack-extension:
 	ls -l chrome-extension.crx
 	mv -v chrome-extension.crx $(HOME)/storage/google-drive/Extensions/text-aid-too.crx
 
-.PHONY: build auto pack-extension pack run-server install help-text
+.PHONY: build auto pack-extension pack run-server install help-text publish
 
+# For Chrome Store.
 pack:
 	$(MAKE) build
 	zip -r text-aid-too.zip chrome-extension -x '*'.coffee
+
+# For npm.
+publish:
+	$(MAKE) build
+	npm publish
