@@ -28,8 +28,6 @@ for module in [
     console.log "ERROR\n#{module} is not available: sudo npm install -g #{module}"
     process.exit 1
 
-console.log html
-
 config =
   port: "9293"
   host: "localhost"
@@ -122,7 +120,7 @@ handler = (ws) -> (message) ->
       fs.readFile filename, "utf8", (error, data) ->
         return exit() if error
         console.log "  send:", filename
-        data = parseMarkdown data if args.markdown and request.isContentEditable
+        data = formatParagraphs data if request.isContentEditable
         request.text = data
         ws.send JSON.stringify request
         continuation?()
@@ -143,30 +141,26 @@ handler = (ws) -> (message) ->
       return exit() if error
       sendText exit
 
-parseMarkdown = (text) ->
+isHTML = (text) ->
+  /^</.test(text) and />$/.test text
+
+formatParagraphs = (text) ->
   paragraphs =
     for paragraph in text.split "\n\n"
       paragraph = paragraph.trim()
-      isHTML = /.*>$/
-      if paragraph.length == 0 or isHTML.test paragraph
+      if paragraph.length == 0 or isHTML paragraph
+        # Leave HTML alone.
         paragraph
-      else
+      else if args.markdown
+        # Parse as Markdown.
         try
           text = html.prettyPrint markdown.markdown.toHTML paragraph
           text.replace(/<p>/g, "<p>\n").replace(/<\/p>/g, "\n<\/p>")
         catch
-          console.log "markdown/html processing failed (that's all I know!)."
           paragraph
-  paragraphs.join "\n\n"
-
-wrapParagraphs = (text) ->
-  paragraphs = text.split "\n\n"
-  paragraphs =
-    for paragraph in paragraphs
-      paragraph = paragraph.trim()
-      if paragraph.length == 0 or /^<.*>$/.test paragraph
-        paragraph
       else
+        # Surround the paragraph with <p></p> tags.
         "<p>\n#{paragraph}\n</p>"
+
   paragraphs.join "\n\n"
 
