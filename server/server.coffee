@@ -107,7 +107,6 @@ handler = (ws) -> (message) ->
         """
       return exit()
 
-  text = request.message
   username = process.env.USER ? "unknown"
   directory = process.env.TMPDIR ? "/tmp"
   timestamp = process.hrtime().join "-"
