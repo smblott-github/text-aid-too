@@ -20,7 +20,7 @@ fast-install:
 # port, so it doesn't conflict with the live server.  Note that you'll have to
 # set the port and the secret below within the extension.
 run-server:
-	TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib coffee server/server.coffee --port 9294 --auto-paragraph
+	TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib coffee server/server.coffee --port 9294 --markdown
 
 # This target is probably of interest to smblott only.
 pack-extension:

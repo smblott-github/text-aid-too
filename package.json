@@ -8,6 +8,12 @@
    "licenses" : [ {"type" : "MIT" } ],
    "engines" : { "node" : ">=0.4" },
    "keywords": [ "text", "aid", "extension", "chrome", "edit", "vim" ],
-   "dependencies": { "ws" :  "*", "optimist" :  "*", "watchr": "*", "coffee-script": "*" },
+   "dependencies": {
+      "ws" :  "*",
+      "optimist" :  "*",
+      "watchr": "*",
+      "coffee-script": "*",
+      "markdown": "*"
+   },
    "bin": { "text-aid-too": "server/server.coffee" }
 }
