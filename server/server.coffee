@@ -28,6 +28,9 @@ defaultEditor =
   else
     config.editor
 
+pjson = require "../package.json"
+version = pjson.version
+
 helpText =
   """
   Usage:
@@ -45,6 +48,8 @@ helpText =
   Environment variables:
     TEXT_AID_TOO_EDITOR: the editor command to use.
     TEXT_AID_TOO_SECRET: the shared secret; set this in the extension too.
+
+  Version: #{version}
   """
 
 args = optimist.usage(helpText)
