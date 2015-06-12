@@ -81,7 +81,9 @@ handler = (ws) -> (message) ->
   timestamp = process.hrtime().join "-"
   suffix = if request.isContentEditable then "html" else "txt"
   filename = "#{directory}/#{username}-text-aid-too-#{timestamp}.#{suffix}"
+
   console.log "edit:", filename
+  onExit.push -> console.log "  done:", filename
 
   fs.writeFile filename, request.text, (error) ->
     return exit() if error
@@ -90,6 +92,7 @@ handler = (ws) -> (message) ->
     sendText = (continuation = null) ->
       fs.readFile filename, "utf8", (error, data) ->
         return exit() if error
+        console.log "  send:", filename
         request.text = data
         ws.send JSON.stringify request
         continuation?()
@@ -97,7 +100,12 @@ handler = (ws) -> (message) ->
     monitor = watchr.watch
       path: filename
       listener: sendText
+      # This is only used for the "watch" method.
       catchupDelay: 400
+      # Unfortunately, the "watch" method isn't reliable.  So we're actually using the "watchFile" method
+      # instead.  See https://github.com/bevry/watchr/issues/33.
+      preferredMethods: [ 'watchFile', 'watch' ]
+      interval: 500
     onExit.push -> monitor.close()
 
     child = child_process.exec getEditCommand filename
