@@ -13,6 +13,5 @@
    "run_at": "document_idle",
    "all_frames": true } ],
 
-  // "options_page": "options.html",
   "permissions": [ "storage" ]
 }
