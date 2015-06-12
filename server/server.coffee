@@ -128,6 +128,10 @@ class SimpleCache
     @rotate true
     @rotate true
 
+# This is used for HTML/contentEditable only.  When we ship the HTML to the browser, we record a mapping from
+# the HTML to the original text which we read from the file.  If we later receive the same HTML to edit, then
+# we replace it with the original text.  This allows the user to edit their original text, without having to
+# deal with HTML markup add by markdown-mode.
 reverseCache = new SimpleCache 1000 * 60 * 60, 50
 getCacheKey = (data) -> data.trim().split(/\s+/).join " "
 
@@ -167,6 +171,7 @@ handler = (ws) -> (message) ->
 
   cacheKey = getCacheKey request.text
   if reverseCache.has cacheKey
+    # We re-use the text we cached previously.
     request.text = reverseCache.get cacheKey
   cacheKey = null
 
@@ -182,7 +187,8 @@ handler = (ws) -> (message) ->
           if request.isContentEditable
             formattedData = formatParagraphs data
             formattedKey = getCacheKey formattedData
-            reverseCache.set getCacheKey(formattedData), data
+            # Cache the original text, we may have to re-use it later (but only if we're exiting).
+            reverseCache.set getCacheKey(formattedData), data if continuation == exit
             formattedData
           else
             data
