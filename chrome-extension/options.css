@@ -31,7 +31,7 @@ li {
    padding: 5px;
 }
 
-input[type="text"], textarea {
+input[type="text"], input[type="number"], textarea {
   border: 1px solid #bfbfbf;
   border-radius: 2px;
   color: #444;

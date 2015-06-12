@@ -25,8 +25,14 @@ document.addEventListener "DOMContentLoaded", ->
       for element in [ portElement, secretElement ]
         do (element) ->
           element.addEventListener "change", ->
+            value = element.value.trim()
+
+            # Ensure that port is a number.
+            if element == portElement and not /^[1-9][0-9]*$/.test value
+              element.value = value = Common.default.port
+
             obj = {}
-            obj[element.id] = element.value.trim()
+            obj[element.id] = value
             chrome.storage.sync.set obj
             maintainServerCommand()
 
