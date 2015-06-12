@@ -112,6 +112,11 @@ Markdown to write messages in GMail.
 
 ![Markdown in GMail](https://cloud.githubusercontent.com/assets/2641335/8130117/dc12f86e-1107-11e5-9893-45ce83ed99b5.png).
 
+Tip:
+
+- Prefer not to exit the editor until your done.  Just write the file, and your
+  changes will be updated in the corresponding element.
+
 ### Help Text
 
 At the time of writing, the help text is...
