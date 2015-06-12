@@ -135,7 +135,7 @@ wrapParagraphs = (text) ->
   paragraphs =
     for paragraph in paragraphs
       paragraph = paragraph.trim()
-      if not paragraph or 0 == paragraph.indexOf "<"
+      if paragraph.length == 0 or /^<.*>$/.test paragraph
         paragraph
       else
         "<p>\n#{paragraph}\n</p>"
