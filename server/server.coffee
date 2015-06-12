@@ -31,22 +31,27 @@ defaultEditor =
 helpText =
   """
   Usage:
-    text-aid-too [--port PORT] [--editor EDITOR-COMMAND]
+    text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--auto-paragraph]
 
   Example:
     export TEXT_AID_TOO_EDITOR="gvim"
     TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293
 
+  Auto-paragraph:
+    With the "--auto-paragraph" flag, text-aid-too tries to find naked text
+    paragraphs in HTML texts and wraps them with <p></p> tags.  This only
+    applies to texts from contentEditable elements.
+
   Environment variables:
     TEXT_AID_TOO_EDITOR: the editor command to use.
     TEXT_AID_TOO_SECRET: the shared secret; set this in the extension too.
-
   """
 
-args = optimist.usage helpText
-  .alias "h", "help"
-  .default "port", config.port
-  .default "editor", defaultEditor
+args = optimist.usage(helpText)
+  .alias("h", "help")
+  .default("port", config.port)
+  .default("editor", defaultEditor)
+  .default("auto-paragraph", false)
   .argv
 
 if args.help
@@ -99,6 +104,7 @@ handler = (ws) -> (message) ->
       fs.readFile filename, "utf8", (error, data) ->
         return exit() if error
         console.log "  send:", filename
+        data = wrapParagraphs data if args["auto-paragraph"] and request.isContentEditable
         request.text = data
         ws.send JSON.stringify request
         continuation?()
@@ -118,4 +124,15 @@ handler = (ws) -> (message) ->
     child.on "exit", (error) ->
       return exit() if error
       sendText exit
+
+wrapParagraphs = (text) ->
+  paragraphs = text.split "\n\n"
+  paragraphs =
+    for paragraph in paragraphs
+      paragraph = paragraph.trim()
+      if not paragraph or 0 == paragraph.indexOf "<"
+        paragraph
+      else
+        "<p>\n#{paragraph}\n</p>"
+  paragraphs.join "\n\n"
 

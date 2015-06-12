@@ -102,3 +102,29 @@ You'll then have to configure the same secret on the extension's options page, o
 
 (You cannot set the shared secret on the command line, for obvious reasons.)
 
+### Help Text
+
+At the time of writing, the help text is...
+
+```
+Usage:
+  text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--auto-paragraph]
+
+Example:
+  export TEXT_AID_TOO_EDITOR="gvim"
+  TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293
+
+Auto-paragraph:
+  With the "--auto-paragraph" flag, text-aid-too tries to find naked text
+  paragraphs in HTML texts and wraps them with <p></p> tags.  This only
+  applies to texts from contentEditable elements.
+
+Environment variables:
+  TEXT_AID_TOO_EDITOR: the editor command to use.
+  TEXT_AID_TOO_SECRET: the shared secret; set this in the extension too.
+
+Options:
+  --port            [default: "9293"]
+  --editor          [default: "urxvt -T textaid -geometry 100x30+80+20 -e vim"]
+  --auto-paragraph  [default: false]
+```
