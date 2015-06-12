@@ -2,6 +2,9 @@
 $ = (id) -> document.getElementById id
 
 document.addEventListener "DOMContentLoaded", ->
+  versionElement = $("version")
+  versionElement.textContent = chrome.runtime.getManifest().version
+
   portElement = $("port")
   secretElement = $("secret")
   commandElement = $("command")
