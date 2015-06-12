@@ -12,15 +12,16 @@ document.addEventListener "DOMContentLoaded", ->
 
   maintainServerCommand = ->
     command = ""
-    command += "TEXT_AID_TOO_SECRET=\"#{escape secretElement.value}\""
+    command += "TEXT_AID_TOO_SECRET=\"#{escape secretElement.value.trim()}\""
     command += " text-aid-to"
-    command += " --port #{portElement.value}"
+    command += " --port #{portElement.value.trim()}"
     commandElement.textContent = command
 
   chrome.storage.sync.get [ "port", "secret" ], (items) ->
     unless chrome.runtime.lastError
       port.value = items.port if items.port?
       secret.value = items.secret if items.secret?
+      maintainServerCommand()
 
       for element in [ portElement, secretElement ]
         do (element) ->
@@ -39,5 +40,4 @@ document.addEventListener "DOMContentLoaded", ->
           element.addEventListener "keydown", (event) ->
             element.blur() if event.keyCode == 27
 
-          maintainServerCommand()
           element.addEventListener "keyup", maintainServerCommand
