@@ -10,25 +10,43 @@ isTriggerEvent = do ->
       return false unless event[property] == key[property]
     true
 
-getElementContent = (element) ->
-  if element.isContentEditable then element.innerHTML else element.value
+contentCache = {}
 
-setElementContent = (element, text) ->
-  if element.isContentEditable then element.innerHTML = text else element.value = text
+getElementContent = (element, id) ->
+  if contentCache[id]?
+    contentCache[id]
+  else if element.isContentEditable
+    element.innerHTML
+  else
+    element.value
+
+setElementContent = (element, request) ->
+  contentCache[request.id] = request.originalText if request.originalText?
+  if element.isContentEditable
+    element.innerHTML = request.text
+  else
+    element.value = request.text
+
+clearElementContent = (event) ->
+  if element = getElement()
+    id = Common.identity.getId element
+    delete contentCache[id] if id? and contentCache[id]?
+  true
 
 # Send a request to edit text.
 editElement = (element) ->
+  id = Common.identity.getId element
   chrome.runtime.sendMessage
     name: "edit"
-    text: getElementContent element
+    text: getElementContent element, id
     isContentEditable: element.isContentEditable
-    id: Common.identity.getId element
+    id: id
     frame: frame
 
 # Receive edited text.
 chrome.runtime.onMessage.addListener (request, sender) ->
   if request.frame == frame and element = Common.identity.getObj request.id
-    setElementContent element, request.text
+    setElementContent element, request
   false
 
 # Returns the active element (if it is editable) or null.
@@ -84,4 +102,6 @@ maintainIcon = do ->
 
 for event in [ "focus", "blur" ]
   installListener window, event, maintainIcon
+
+installListener window, "keypress", clearElementContent
 

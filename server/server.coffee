@@ -116,7 +116,7 @@ handler = (ws) -> (message) ->
   console.log "edit:", filename
   onExit.push -> console.log "  done:", filename
 
-  fs.writeFile filename, (request.originalData ? request.text), (error) ->
+  fs.writeFile filename, (request.originalText ? request.text), (error) ->
     return exit() if error
     onExit.push -> fs.unlink filename
 
@@ -124,9 +124,8 @@ handler = (ws) -> (message) ->
       fs.readFile filename, "utf8", (error, data) ->
         return exit() if error
         console.log "  send:", filename
-        if request.isContentEditable
-          request.originalData = data
-          request.text = formatParagraphs data
+        request.text = request.originalText = data
+        request.text = formatParagraphs data if request.isContentEditable
         ws.send JSON.stringify request
         continuation?()
 
