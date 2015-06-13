@@ -37,11 +37,23 @@ launchEdit = (request) ->
         Common.log "  recv: #{request.tabId} #{request.id} #{url} #{secret} length=#{response.text.length}"
         chrome.tabs.sendMessage response.tabId, response
 
+updateIcon = (request, sender) ->
+  Common.log "icon", request.showing
+  if request.showing
+    chrome.pageAction.show sender.tab.id
+  else
+    chrome.pageAction.hide sender.tab.id
+
+handlers =
+  edit: launchEdit
+  icon: updateIcon
+
 chrome.runtime.onMessage.addListener (request, sender) ->
-  Common.log "launching..."
+  Common.log "request", request.name, handlers[request.name]?
   if sender.tab?.id?
-    launchEdit Common.extend request,
+    Common.extend request,
       tabId: sender.tab.id
       url: sender.tab.url
       isChromeStoreVersion: Common.isChromeStoreVersion
+    handlers[request.name]? request, sender
   false

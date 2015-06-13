@@ -54,6 +54,7 @@ chrome.storage.sync.get "key", (items) ->
     # This is the main keyboard-event listener.  We check on every keydown because some sites (notably
     # Google's Inbox) change the content-editable flag on the fly.
     installListener window, "keydown", (event) ->
+      maintainIcon()
       if isTriggerEvent(key, event) and element = getElement()
         Common.log "keyboard hit, element:", element
         event.preventDefault()
@@ -65,4 +66,22 @@ chrome.storage.sync.get "key", (items) ->
     chrome.storage.onChanged.addListener (changes, area) =>
       if area == "sync" and changes.key?.newValue?
         key = changes.key.newValue
+
+maintainIcon = do ->
+  showing = false
+  ->
+    changed = false
+    if not showing and getElement()
+      showing = true
+      changed = true
+    else if showing and not getElement()
+      showing = false
+      changed = true
+    if changed
+      chrome.runtime.sendMessage name: "icon", showing: showing
+      Common.log "icon:", showing
+    true
+
+for event in [ "focus", "blur" ]
+  installListener window, event, maintainIcon
 
