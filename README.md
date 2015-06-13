@@ -6,18 +6,19 @@ combination of a
 [Chrome extension](https://chrome.google.com/webstore/detail/text-aid-too/klbcooigafjpbiahdjccmajnaehomajc) and a
 [server](https://www.npmjs.com/package/text-aid-too).
 
-But *Text-aid-too* is different:
+*But Text-aid-too is different:*
 - In addition to traditional HTML inputs, it also works for `contentEditable`
-  inputs (such as those used by GMail).
-- It checks inputs dynamically, so it works on sites (such as Google's Inbox)
-  which toggle the `contentEditable` status on-the-fly.
-- It updates the input's contents whenever the file is written, so you can
-  preview your changes as you go along.
-- The temporary file name has the appropriate suffix for the input type (`.txt`
+  inputs (such as the GMail compose window).
+- It updates the input's contents whenever the file is written/saved, so you
+  can preview your changes as you go along.
+- In `contentEditable` inputs (e.g. on Gmail) you can optionally use Markdown
+  mark up, so you can write rich text GMail messages in Markdown (experimental,
+  see [below](https://github.com/smblott-github/text-aid-too#markdown)).
+- The temporary file name has the appropriate extension for the input type (`.txt`
   or `.html`, as appropriate).  Therefore, your text editor can detect the file
-  type and set its bindings and the like accordingly.
-- In `contentEditable` inputs (e.g. on Gmail) you can (optionally) use Markdown
-  (experimental, see [below](https://github.com/smblott-github/text-aid-too#markdown)).
+  type and set its bindings accordingly.
+- It checks inputs dynamically, so it works on sites (such as Google's Inbox
+  which toggle the `contentEditable` status on-the-fly).
 
 The default keyboard shortcut is `<Ctrl-;>`, but you can set your own keyboard
 shortcut on the extension's options page.
@@ -51,12 +52,12 @@ Then, launch the server; which might be something like...
     # Or...
     text-aid-server --port 9294
 
-#### The hard way
+#### The Hard Way
 
 1. Clone the repo.
+1. `make build` - you will need Coffeescript.
 1. Install the server with `npm install -g .`.
 1. Run the server (as above).
-1. Build the extension with  `make build`.  (You will need Coffeescript.)
 1. Install the extension as an unpacked extension; it's in `./chrome-extension`.
 
     Visit the extension's options page to configure the port and shared secret,
@@ -114,8 +115,11 @@ Markdown to write messages in GMail.
 
 Tip:
 
-- Prefer not to exit the editor until your done.  Just write the file, and your
-  changes will be updated in the corresponding element.
+- Prefer not to exit/close the editor until your done.  Just write the file,
+  and your changes will be updated in the corresponding element.
+- Paragraphs (separated by `\\n\\n`) are handled separately.  So one paragraph
+  can be HTML (is it is in the `contentEditable` input, which the next can be
+  Markdown.
 
 ### Help Text
 
@@ -139,7 +143,7 @@ Environment variables:
   TEXT_AID_TOO_EDITOR: the editor command to use.
   TEXT_AID_TOO_SECRET: the shared secret; set this in the extension too.
 
-Version: 1.0.5
+Version: 1.1.1
 
 Options:
   --port      [default: "9293"]
