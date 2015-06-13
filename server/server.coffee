@@ -19,7 +19,9 @@ for module in [
   "markdown"
   "html"
   # These are standard.
+  "os"
   "fs"
+  "path"
   "child_process"
   ]
   try
@@ -39,7 +41,7 @@ defaultEditor =
   else
     config.editor
 
-pjson = require "../package.json"
+pjson = require path.join "..", "package.json"
 version = pjson.version
 
 helpText =
@@ -113,10 +115,10 @@ handler = (ws) -> (message) ->
     return exit()
 
   username = process.env.USER ? "unknown"
-  directory = process.env.TMPDIR ? "/tmp"
+  directory = process.env.TMPDIR ? os.tmpdir()
   timestamp = process.hrtime().join "-"
   suffix = if request.isContentEditable then "html" else "txt"
-  filename = "#{directory}/#{username}-text-aid-too-#{timestamp}.#{suffix}"
+  filename = path.join directory, "#{username}-text-aid-too-#{timestamp}.#{suffix}"
 
   console.log "edit:", filename
   onExit.push -> console.log "  done:", filename

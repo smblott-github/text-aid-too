@@ -22,7 +22,7 @@ launchEdit = (request) ->
 
     getOrSet "secret", Common.default.secret, (secret) ->
       request.secret = secret
-      Common.log "send: #{request.tabId} #{request.id} #{url} #{secret} length=#{request.text.length}"
+      Common.log "send: #{request.tabId} #{request.id} #{url} #{secret} length=#{request.text?.length}"
 
       socket = new WebSocket url
       socket.onerror = socket.onclose = ->
@@ -34,7 +34,7 @@ launchEdit = (request) ->
 
       socket.onmessage = (message) ->
         response = JSON.parse message.data
-        Common.log "  recv: #{request.tabId} #{request.id} #{url} #{secret} length=#{response.text.length}"
+        Common.log "  recv: #{request.tabId} #{request.id} #{url} #{secret} length=#{response.text?.length}"
         chrome.tabs.sendMessage response.tabId, response
   false # We will not be calling sendResponse.
 
