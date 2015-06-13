@@ -82,59 +82,6 @@ console.log """
   version #{version}
   """
 
-# A simple cache. Entries used within two expiry periods are retained, otherwise they are discarded.
-# At most 2 * @entries entries are retained.
-class SimpleCache
-  # expiry: expiry time in milliseconds (default, one hour)
-  # entries: maximum number of entries in @cache (there may be up to this many entries in @previous, too)
-  constructor: (@expiry = 60 * 60 * 1000, @entries = 1000) ->
-    @cache = {}
-    @previous = {}
-    @lastRotation = new Date()
-
-  has: (key) ->
-    @rotate()
-    (key of @cache) or key of @previous
-
-  # Set value, and return that value.  If value is null, then delete key.
-  set: (key, value = null) ->
-    @rotate()
-    delete @previous[key]
-    if value?
-      @cache[key] = value
-    else
-      delete @cache[key]
-      null
-
-  get: (key) ->
-    @rotate()
-    if key of @cache
-      @cache[key]
-    else if key of @previous
-      @cache[key] = @previous[key]
-      delete @previous[key]
-      @cache[key]
-    else
-      null
-
-  rotate: (force = false) ->
-    if force or @entries < Object.keys(@cache).length or @expiry < new Date() - @lastRotation
-      console.log "rotating reverse cache"
-      @lastRotation = new Date()
-      @previous = @cache
-      @cache = {}
-
-  clear: ->
-    @rotate true
-    @rotate true
-
-# This is used for HTML/contentEditable only.  When we ship the HTML to the browser, we record a mapping from
-# the HTML to the original text which we read from the file.  If we later receive the same HTML to edit, then
-# we replace it with the original text.  This allows the user to edit their original text, without having to
-# deal with HTML markup add by markdown-mode.
-reverseCache = new SimpleCache 1000 * 60 * 60, 50
-getCacheKey = (data) -> data.trim().split(/\s+/).join " "
-
 WSS  = ws.Server
 wss  = new WSS port: args.port, host: config.host
 wss.on "connection", (ws) -> ws.on "message", handler ws
@@ -169,12 +116,6 @@ handler = (ws) -> (message) ->
   console.log "edit:", filename
   onExit.push -> console.log "  done:", filename
 
-  cacheKey = getCacheKey request.text
-  if reverseCache.has cacheKey
-    # We re-use the text we cached previously.
-    request.text = reverseCache.get cacheKey
-  cacheKey = null
-
   fs.writeFile filename, request.text, (error) ->
     return exit() if error
     onExit.push -> fs.unlink filename
@@ -183,15 +124,7 @@ handler = (ws) -> (message) ->
       fs.readFile filename, "utf8", (error, data) ->
         return exit() if error
         console.log "  send:", filename
-        request.text =
-          if request.isContentEditable
-            formattedData = formatParagraphs data
-            formattedKey = getCacheKey formattedData
-            # Cache the original text, we may have to re-use it later (but only if we're exiting).
-            reverseCache.set getCacheKey(formattedData), data if continuation == exit
-            formattedData
-          else
-            data
+        request.text = formatParagraphs data if request.isContentEditable
         ws.send JSON.stringify request
         continuation?()
 
