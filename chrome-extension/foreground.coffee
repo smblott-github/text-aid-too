@@ -55,6 +55,7 @@ chrome.storage.sync.get "key", (items) ->
     # Google's Inbox) change the content-editable flag on the fly.
     installListener window, "keydown", (event) ->
       if isTriggerEvent(key, event) and element = getElement()
+        Common.log "keyboard hit, element:", element
         event.preventDefault()
         event.stopImmediatePropagation()
         editElement element

@@ -34,5 +34,13 @@ Common =
     hash1[key] = value for own key, value of hash2
     hash1
 
+  chromeStoreKey: "klbcooigafjpbiahdjccmajnaehomajc"
+
+  isChromeStoreVersion: do ->
+    0 == chrome.extension.getURL("").indexOf "chrome-extension://klbcooigafjpbiahdjccmajnaehomajc"
+
+  log: (args...) ->
+    console.log args... unless @isChromeStoreVersion
+
 root = exports ? window
 root.Common = Common
