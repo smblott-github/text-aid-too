@@ -118,8 +118,7 @@ Tips:
 - Prefer not to exit/close the editor until your done.  Just write/save the file
   and your changes will be updated in the corresponding input.
 - Paragraphs (separated by `\n\n`) are handled separately.  So one paragraph
-  can be HTML (if it's in the `contentEditable` input), while the next can be
-  Markdown.
+  can be HTML, while the next can be Markdown.
 
 ### Help Text
 
