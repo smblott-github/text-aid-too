@@ -2,7 +2,9 @@
 
 *Text-aid-too* is a variation on the *text-aid* theme: it allows you to edit
 web inputs in your native text editor, such as Vim or Emacs.  It's a
-combination of a Chrome extension and a server.
+combination of a
+[Chrome extension](https://chrome.google.com/webstore/detail/text-aid-too/klbcooigafjpbiahdjccmajnaehomajc) and a
+[server](https://www.npmjs.com/package/text-aid-too).
 
 But *Text-aid-too* is different:
 - In addition to traditional HTML inputs, it also works for `contentEditable`
