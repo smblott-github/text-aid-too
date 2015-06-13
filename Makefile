@@ -1,6 +1,6 @@
 
 build:
-	coffee -c ./chrome-extension/*.coffee
+	coffee -c ./chrome-extension/*.coffee ./server/server.coffee
 
 auto:
 	coffee -w -c .
