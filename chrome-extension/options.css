@@ -54,7 +54,11 @@ button:focus, input[type="text"]:focus, textarea:focus {
   outline: none;
 }
 
-pre, code, .code {
+pre, code, .code, #status {
   font-family: Consolas, "Liberation Mono", Courier, monospace;
   background: #eeeeee;
+}
+
+#statusWrapper {
+   float: right;
 }

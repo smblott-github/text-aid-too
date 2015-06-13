@@ -36,6 +36,32 @@ launchEdit = (request) ->
         response = JSON.parse message.data
         Common.log "  recv: #{request.tabId} #{request.id} #{url} #{secret} length=#{response.text.length}"
         chrome.tabs.sendMessage response.tabId, response
+  false # We will not be calling sendResponse.
+
+launchPing = (request, sender, sendResponse) ->
+  getOrSet "port", Common.default.port, (port) ->
+    port = parseInt port
+    url = "ws://localhost:#{port}/"
+
+    getOrSet "secret", Common.default.secret, (secret) ->
+      request.secret = secret
+      Common.log "ping..."
+
+      exit = (isUp) ->
+        socket.onerror = socket.onclose = socket.onmessage = null
+        Common.log "  #{isUp}"
+        sendResponse { isUp }
+        socket.close()
+
+      socket = new WebSocket url
+      socket.onerror = socket.onclose = -> exit false
+      socket.onopen = -> socket.send JSON.stringify request
+
+      socket.onmessage = (message) ->
+        response = JSON.parse message.data
+        exit response.isOk
+
+  true # We *will* be calling sendResponse.
 
 updateIcon = (request, sender) ->
   Common.log "icon", request.showing
@@ -43,17 +69,20 @@ updateIcon = (request, sender) ->
     chrome.pageAction.show sender.tab.id
   else
     chrome.pageAction.hide sender.tab.id
+  false # We will not be calling sendResponse.
 
 handlers =
   edit: launchEdit
+  ping: launchPing
   icon: updateIcon
 
-chrome.runtime.onMessage.addListener (request, sender) ->
+chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
   Common.log "request", request.name, handlers[request.name]?
   if sender.tab?.id?
     Common.extend request,
       tabId: sender.tab.id
       url: sender.tab.url
       isChromeStoreVersion: Common.isChromeStoreVersion
-    handlers[request.name]? request, sender
-  false
+    handlers[request.name]? request, sender, sendResponse
+  else
+    false

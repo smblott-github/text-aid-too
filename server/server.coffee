@@ -107,6 +107,11 @@ handler = (ws) -> (message) ->
         """
       return exit()
 
+  if request.name = "ping"
+    console.log "ping: ok"
+    ws.send JSON.stringify isOk: true
+    return exit()
+
   username = process.env.USER ? "unknown"
   directory = process.env.TMPDIR ? "/tmp"
   timestamp = process.hrtime().join "-"

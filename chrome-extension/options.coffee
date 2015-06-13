@@ -87,3 +87,15 @@ document.addEventListener "DOMContentLoaded", ->
 
         window.addEventListener "keyup", keyup = -> cancel()
 
+  maintainStatus = do ->
+    status = $("status")
+    messageTexts = true: "connected", false: "cannot connect"
+    messageColours = true: "Green", false: "Red"
+    ->
+      chrome.runtime.sendMessage { name: "ping" }, (response) ->
+        status.textContent = messageTexts[response.isUp]
+        status.style.color = messageColours[response.isUp]
+        Common.setTimeout 1000, maintainStatus
+
+  maintainStatus()
+
