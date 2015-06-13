@@ -31,7 +31,9 @@ pack-extension:
 # For Chrome Store.
 pack:
 	$(MAKE) build
-	zip -r text-aid-too.zip chrome-extension -x '*'.coffee
+	zip -r text-aid-too.zip chrome-extension \
+	   -x '*'.coffee \
+	   -x chrome-extension/icons/icon-512.png
 
 # For npm.
 publish:
