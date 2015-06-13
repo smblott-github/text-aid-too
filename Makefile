@@ -12,7 +12,9 @@ install:
 # port, so it doesn't conflict with the live server.  Note that you'll have to
 # set the port and the secret below within the extension.
 run-server:
-	TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib coffee server/server.coffee --port 9294 --markdown
+	TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib \
+	   TEXT_AID_TOO_EDITOR="urxvt -T textaid -geometry 90x25-50+15 -e vim" \
+	  coffee server/server.coffee --port 9294 --markdown
 
 help-text:
 	coffee server/server.coffee -h
