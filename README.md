@@ -17,8 +17,8 @@ combination of a
 - The temporary file name has the appropriate extension for the input type (`.txt`
   or `.html`, as appropriate).  Therefore, your text editor can detect the file
   type appropriately.
-- It checks inputs dynamically, so it works on sites (such as Google's Inbox
-  which toggle the `contentEditable` status on-the-fly).
+- It checks inputs dynamically, so it works on sites (such as Google's Inbox)
+  which toggle the `contentEditable` status on-the-fly.
 
 The default keyboard shortcut is `<Ctrl-;>`, but you can set your own keyboard
 shortcut on the extension's options page.
