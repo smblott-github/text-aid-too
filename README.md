@@ -14,6 +14,8 @@ But *Text-aid-too* is different:
 - The temporary file name has the appropriate suffix for the input type (`.txt`
   or `.html`, as appropriate).  Therefore, your text editor can detect the file
   type and set its bindings and the like accordingly.
+- In `contentEditable` inputs (e.g. Gmail) you can (optionally) use Markdown
+  (experimental, see below).
 
 The default keyboard shortcut is `<Ctrl-;>`, but you can set your own keyboard
 shortcut on the extension's options page.
