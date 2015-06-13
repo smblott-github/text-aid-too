@@ -118,7 +118,7 @@ Tips:
 - Prefer not to exit/close the editor until your done.  Just write/save the file
   and your changes will be updated in the corresponding input.
 - Paragraphs (separated by `\n\n`) are handled separately.  So one paragraph
-  can be HTML, while the next can be Markdown.
+  can be HTML, while the next is Markdown.
 
 ### Help Text
 
@@ -130,7 +130,8 @@ Usage:
 
 Example:
   export TEXT_AID_TOO_EDITOR="gvim"
-  TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293
+  export TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib
+  text-aid-too --port 9293
 
 Markdown (experimental):
   With the "--markdown" flag, text-aid-too tries to find naked text
