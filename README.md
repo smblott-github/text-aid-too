@@ -16,7 +16,7 @@ combination of a
   see [below](https://github.com/smblott-github/text-aid-too#markdown)).
 - The temporary file name has the appropriate extension for the input type (`.txt`
   or `.html`, as appropriate).  Therefore, your text editor can detect the file
-  type and set its bindings accordingly.
+  type appropriately.
 - It checks inputs dynamically, so it works on sites (such as Google's Inbox
   which toggle the `contentEditable` status on-the-fly).
 
