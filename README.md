@@ -115,7 +115,7 @@ Markdown to write messages in GMail.
 
 Tips:
 
-- Prefer not to exit/close the editor until your done.  Just write the file,
+- Prefer not to exit/close the editor until your done.  Just write/save the file
   and your changes will be updated in the corresponding element.
 - Paragraphs (separated by `\\n\\n`) are handled separately.  So one paragraph
   can be HTML (is it is in the `contentEditable` input, which the next can be
