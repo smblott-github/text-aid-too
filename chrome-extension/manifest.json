@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Text-Aid-Too",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Edit web inputs (including on GMail) with your favourite native text editor.",
 
   "background": { "scripts": [ "common.js", "background.js" ] },
@@ -12,6 +12,10 @@
    "js": [ "common.js", "foreground.js" ],
    "run_at": "document_idle",
    "all_frames": true } ],
+
+   "icons": { "16": "icons/icon-16.png",
+              "48": "icons/icon-48.png",
+             "128": "icons/icon-128.png" },
 
   "permissions": [ "storage" ]
 }
