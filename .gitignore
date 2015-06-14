@@ -1,3 +1,4 @@
 *.js
 text-aid-too.zip
 node_modules
+npm-debug.log

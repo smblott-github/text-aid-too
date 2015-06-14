@@ -29,6 +29,10 @@ shortcut on the extension's options page.
 
 ### Installation
 
+#### Prerequisites
+
+You'll need [nodejs](https://nodejs.org/) and [Coffeescript](http://coffeescript.org/) (`sudo npm install -g coffee-script`).
+
 #### The Easy Way
 
 1. Install the [extension](https://chrome.google.com/webstore/detail/klbcooigafjpbiahdjccmajnaehomajc) from the Chrome Store.
