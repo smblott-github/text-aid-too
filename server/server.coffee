@@ -5,6 +5,7 @@
 #   npm install optimist
 #   npm install ws
 #   npm install markdown
+#   npm install to-markdown
 #   npm install html
 #   npm install coffee-script
 
@@ -17,6 +18,7 @@ for module in [
   "optimist"
   "ws"
   "markdown"
+  "to-markdown"
   "html"
   # These are standard.
   "os"
@@ -29,6 +31,8 @@ for module in [
   catch
     console.log "ERROR\n#{module} is not available: sudo npm install -g #{module}"
     process.exit 1
+
+toMarkdown = global["to-markdown"]
 
 config =
   port: "9293"
@@ -123,7 +127,15 @@ handler = (ws) -> (message) ->
   console.log "edit:", filename
   onExit.push -> console.log "  done:", filename
 
-  fs.writeFile filename, (request.originalText ? request.text), (error) ->
+  text =
+    if request.originalText?
+      request.originalText
+    else if request.isContentEditable
+      fromHTML request.text
+    else
+      request.text
+
+  fs.writeFile filename, text, (error) ->
     return exit() if error
     onExit.push -> fs.unlink filename
 
@@ -132,7 +144,7 @@ handler = (ws) -> (message) ->
         return exit() if error
         console.log "  send:", filename
         request.text = request.originalText = data
-        request.text = formatParagraphs data if request.isContentEditable
+        request.text = toHTML data if request.isContentEditable
         ws.send JSON.stringify request
         continuation?()
 
@@ -155,7 +167,7 @@ handler = (ws) -> (message) ->
 isHTML = (text) ->
   /^</.test(text) and />$/.test text
 
-formatParagraphs = (text) ->
+toHTML = (text) ->
   paragraphs =
     for paragraph in text.split "\n\n"
       paragraph = paragraph.trim()
@@ -172,6 +184,34 @@ formatParagraphs = (text) ->
       else
         # Surround the paragraph with <p></p> tags.
         "<p>\n#{paragraph}\n</p>"
+
+  paragraphs.join "\n\n"
+
+isParagraph = (text) ->
+  /^<p>/.test(text) and /<\/p>$/.test text
+
+fromHTML = (text) ->
+  paragraphs =
+    for paragraph in text.split "\n\n"
+      paragraph = paragraph.trim()
+      if paragraph.length == 0
+        # Leave empty "paragraphs" alone.
+        paragraph
+      else if args.markdown
+        # Try to convert to Markdown.
+        try
+          console.log toMarkdown paragraph
+          toMarkdown paragraph
+        catch
+          paragraph
+      else if isParagraph paragraph
+        try
+          paragraph = html.prettyPrint(paragraph).trim()
+          paragraph.replace(/^<p>/, "").replace /<\/p>$/, ""
+        catch
+          paragraph
+      else
+        paragraph
 
   paragraphs.join "\n\n"
 
