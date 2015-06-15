@@ -51,10 +51,10 @@ Then, launch the server; which might be something like...
     export TEXT_AID_TOO_EDITOR="gvim"
 
     # Use the default port (9293)...
-    text-aid-server
+    text-aid-too
 
     # Or...
-    text-aid-server --port 9294
+    text-aid-too --port 9294
 
 #### The Hard Way
 
