@@ -48,7 +48,7 @@ You'll need [nodejs](https://nodejs.org/) and [Coffeescript](http://coffeescript
 Then, launch the server; which might be something like...
 
     export TEXT_AID_TOO_SECRET="<REPLACE-ME>"
-    export TEXT_AID_TOO_EDITOR="gvim"
+    export TEXT_AID_TOO_EDITOR="gvim -f"
 
     # Use the default port (9293)...
     text-aid-too
@@ -133,7 +133,7 @@ Usage:
   text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--markdown]
 
 Example:
-  export TEXT_AID_TOO_EDITOR="gvim"
+  export TEXT_AID_TOO_EDITOR="gvim -f"
   export TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib
   text-aid-too --port 9293
 

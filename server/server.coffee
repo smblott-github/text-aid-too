@@ -50,7 +50,7 @@ helpText =
     text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--markdown]
 
   Example:
-    export TEXT_AID_TOO_EDITOR="gvim"
+    export TEXT_AID_TOO_EDITOR="gvim -f"
     TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293
 
   Markdown (experimental):
