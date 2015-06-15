@@ -56,6 +56,17 @@ Then, launch the server; which might be something like...
     # Or...
     text-aid-too --port 9294
 
+##### Important
+
+- The editor command must not fork and exit.  Its process must remain until the
+  editor is closed.  For example, don't set the editor to `gvim` (which forks),
+  set it to `gvim -f` which runs in the foreground (or the equivalent for your
+  favourite editor) instead.
+
+- *Text-aid-too* will not work with other *text-aid* servers.  Those use HTTP,
+  whereas *Text-aid-too* uses its own a web-socket based protocol.  This allows
+  it to update the input's contents on-the-fly (that is, on file write).
+
 #### The Hard Way
 
 1. Clone the repo.
@@ -66,12 +77,6 @@ Then, launch the server; which might be something like...
 
     Visit the extension's options page to configure the port and shared secret,
     if required (see below).
-
-### Important
-
-*Text-aid-too* will not work with other *text-aid* servers.  Those use HTTP,
-whereas *Text-aid-too* uses its own a web-socket based protocol.  This allows
-it to update the input's contents on-the-fly (that is, on file write).
 
 ### The Editor Command
 
