@@ -89,7 +89,9 @@ wss  = new WSS port: args.port, host: config.host
 wss.on "connection", (ws) -> ws.on "message", handler ws
 
 getEditCommand = (filename) ->
-  "#{args.editor} #{filename}"
+  command = if 0 <= args.editor.indexOf "%s" then args.editor.replace "%s", filename else "#{args.editor} #{filename}"
+  console.log "exec:", command
+  command
 
 handler = (ws) -> (message) ->
   request = JSON.parse message
