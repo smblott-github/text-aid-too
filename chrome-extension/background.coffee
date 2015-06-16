@@ -76,13 +76,18 @@ handlers =
   ping: launchPing
   icon: updateIcon
 
-chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
-  Common.log "request", request.name, handlers[request.name]?
-  if sender.tab?.id?
-    Common.extend request,
-      tabId: sender.tab.id
-      url: sender.tab.url
-      isChromeStoreVersion: Common.isChromeStoreVersion
-    handlers[request.name]? request, sender, sendResponse
-  else
-    false
+chrome.runtime.onMessage.addListener do ->
+  extensionVersion = chrome.runtime.getManifest().version
+
+  (request, sender, sendResponse) ->
+    console.log extensionVersion
+    Common.log "request", request.name, handlers[request.name]?
+    if sender.tab?.id?
+      Common.extend request,
+        tabId: sender.tab.id
+        url: sender.tab.url
+        isChromeStoreVersion: Common.isChromeStoreVersion
+        extensionVersion: extensionVersion
+      handlers[request.name]? request, sender, sendResponse
+    else
+      false

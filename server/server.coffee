@@ -96,9 +96,10 @@ handler = (ws) -> (message) ->
 
   onExit = []
   onExit.push -> ws.close()
-  exit = ->
+  exit = (continuation = null) ->
     callback() for callback in onExit.reverse()
     onExit = []
+    continuation?()
 
   if secret? and 0 < secret.length
     unless request.secret? and request.secret == secret
@@ -109,69 +110,81 @@ handler = (ws) -> (message) ->
         """
       return exit()
 
-  if request.name == "ping"
-    console.log "ping: ok"
-    ws.send JSON.stringify isOk: true
-    return exit()
+  sendResponse = (response, continuation = null) ->
+    response.serverVersion = version
+    ws.send JSON.stringify response
+    continuation?()
 
-  username = process.env.USER ? "unknown"
-  directory = process.env.TMPDIR ? os.tmpdir()
-  timestamp = process.hrtime().join "-"
-  suffix = if request.isContentEditable then "html" else "txt"
-  filename = path.join directory, "#{username}-text-aid-too-#{timestamp}.#{suffix}"
+  handlers =
+    ping: ->
+      console.log "ping: ok"
+      request.isOk = true
+      sendResponse request, exit
 
-  console.log "edit:", filename
-  onExit.push -> console.log "  done:", filename
+    edit: ->
+      username = process.env.USER ? "unknown"
+      directory = process.env.TMPDIR ? os.tmpdir()
+      timestamp = process.hrtime().join "-"
+      suffix = if request.isContentEditable then "html" else "txt"
+      filename = path.join directory, "#{username}-text-aid-too-#{timestamp}.#{suffix}"
 
-  fs.writeFile filename, (request.originalText ? request.text), (error) ->
-    return exit() if error
-    onExit.push -> fs.unlink filename
+      console.log "edit:", filename
+      onExit.push -> console.log "  done:", filename
 
-    sendText = (continuation = null) ->
-      fs.readFile filename, "utf8", (error, data) ->
+      fs.writeFile filename, (request.originalText ? request.text), (error) ->
         return exit() if error
-        console.log "  send:", filename
-        request.text = request.originalText = data
-        request.text = formatParagraphs data if request.isContentEditable
-        ws.send JSON.stringify request
-        continuation?()
+        onExit.push -> fs.unlink filename
 
-    monitor = watchr.watch
-      path: filename
-      listener: sendText
-      # This is only used for the "watch" method.
-      catchupDelay: 400
-      # Unfortunately, the "watch" method isn't reliable.  So we're actually using the "watchFile" method
-      # instead.  See https://github.com/bevry/watchr/issues/33.
-      preferredMethods: [ 'watchFile', 'watch' ]
-      interval: 500
-    onExit.push -> monitor.close()
+        sendText = (continuation = null) ->
+          fs.readFile filename, "utf8", (error, data) ->
+            return exit() if error
+            console.log "  send:", filename
+            data = data.replace /\n$/, ""
+            request.text = request.originalText = data
+            request.text = formatParagraphs data if request.isContentEditable
+            sendResponse request, continuation
 
-    child = child_process.exec getEditCommand filename
-    child.on "exit", (error) ->
-      return exit() if error
-      sendText exit
+        monitor = watchr.watch
+          path: filename
+          listener: sendText
+          # This is only used for the "watch" method.
+          catchupDelay: 400
+          # Unfortunately, the "watch" method isn't reliable.  So we're actually using the "watchFile" method
+          # instead.  See https://github.com/bevry/watchr/issues/33.
+          preferredMethods: [ 'watchFile', 'watch' ]
+          interval: 500
+        onExit.push -> monitor.close()
 
-isHTML = (text) ->
-  /^</.test(text) and />$/.test text
+        child = child_process.exec getEditCommand filename
+        child.on "exit", (error) ->
+          if error then exit() else sendText exit
 
-formatParagraphs = (text) ->
-  paragraphs =
-    for paragraph in text.split "\n\n"
-      paragraph = paragraph.trim()
-      if paragraph.length == 0 or isHTML paragraph
-        # Leave HTML and empty "paragraphs" alone.
-        paragraph
-      else if args.markdown
-        # Parse as Markdown.
-        try
-          text = html.prettyPrint markdown.markdown.toHTML paragraph
-          text.replace(/<p>/g, "<p>\n").replace(/<\/p>/g, "\n<\/p>")
-        catch
+  if handlers[request.name]?
+    handlers[request.name]()
+  else
+    console.log "error; unknown request:", request
+
+formatParagraphs = do ->
+  isHTML = do ->
+    re = /<\/?[a-zA-Z]+/
+    (text) -> re.test text
+
+  isWhitespace = do ->
+    re = /^\s*$/
+    (text) -> re.test text
+
+  (text) ->
+    paragraphs =
+      for paragraph in text.split "\n\n"
+        if isHTML(paragraph) or isWhitespace paragraph
           paragraph
-      else
-        # Surround the paragraph with <p></p> tags.
-        "<p>\n#{paragraph}\n</p>"
+        else if args.markdown
+          try
+            html.prettyPrint markdown.markdown.toHTML paragraph
+          catch
+            paragraph
+        else
+          paragraph
 
-  paragraphs.join "\n\n"
+    paragraphs.join "\n\n"
 
