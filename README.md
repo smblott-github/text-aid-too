@@ -64,7 +64,7 @@ Then, launch the server; which might be something like...
   favourite editor) instead.
 
 - *Text-aid-too* will not work with other *text-aid* servers.  Those use HTTP,
-  whereas *Text-aid-too* uses its own a web-socket based protocol.  This allows
+  whereas *Text-aid-too* uses its own web-socket based protocol.  This allows
   it to update the input's contents on-the-fly (that is, on file write).
 
 #### The Hard Way
