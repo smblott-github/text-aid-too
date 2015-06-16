@@ -48,13 +48,24 @@ You'll need [nodejs](https://nodejs.org/) and [Coffeescript](http://coffeescript
 Then, launch the server; which might be something like...
 
     export TEXT_AID_TOO_SECRET="<REPLACE-ME>"
-    export TEXT_AID_TOO_EDITOR="gvim"
+    export TEXT_AID_TOO_EDITOR="gvim -f"
 
     # Use the default port (9293)...
     text-aid-too
 
     # Or...
     text-aid-too --port 9294
+
+##### Important
+
+- The editor command must not fork and exit.  Its process must remain until the
+  editor is closed.  For example, don't set the editor to `gvim` (which forks),
+  set it to `gvim -f` which runs in the foreground (or the equivalent for your
+  favourite editor) instead.
+
+- *Text-aid-too* will not work with other *text-aid* servers.  Those use HTTP,
+  whereas *Text-aid-too* uses its own web-socket based protocol.  This allows
+  it to update the input's contents on-the-fly (that is, on file write).
 
 #### The Hard Way
 
@@ -67,12 +78,6 @@ Then, launch the server; which might be something like...
     Visit the extension's options page to configure the port and shared secret,
     if required (see below).
 
-### Important
-
-*Text-aid-too* will not work with other *text-aid* servers.  Those use HTTP,
-whereas *Text-aid-too* uses its own a web-socket based protocol.  This allows
-it to update the input's contents on-the-fly (that is, on file write).
-
 ### The Editor Command
 
 The editor command is set when the server is launched.  Use one of...
@@ -82,6 +87,13 @@ The editor command is set when the server is launched.  Use one of...
 
     # Or like this...
     export TEXT_AID_TOO_EDITOR="urxvt -T textaid -geometry 100x30+80+20 -e vim"
+    text-aid-too
+
+    # Normally, the file name is just appended to the editor command.
+    # However, %s in the editor command (if present) is replaced with the
+    # file name instead.
+    # Like this...
+    export TEXT_AID_TOO_EDITOR="pantheon-terminal -e 'vim %s'"
     text-aid-too
 
 The command line takes priority.
@@ -133,7 +145,7 @@ Usage:
   text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--markdown]
 
 Example:
-  export TEXT_AID_TOO_EDITOR="gvim"
+  export TEXT_AID_TOO_EDITOR="gvim -f"
   export TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib
   text-aid-too --port 9293
 
@@ -154,3 +166,15 @@ Options:
   --editor    [default: "urxvt -T textaid -geometry 100x30+80+20 -e vim"]
   --markdown  [default: false]
 ```
+
+### Release Notes
+
+Extension version 1.1.1:
+- Tweaks to the options page.
+
+Server version 1.1.4:
+- Add replacement of `%s` in the editor command (if present) with the file
+  name; otherwise the file name is simply appended to the editor command.
+
+Previous versions:
+- Lost on the mists of time.

@@ -50,7 +50,7 @@ helpText =
     text-aid-too [--port PORT] [--editor EDITOR-COMMAND] [--markdown]
 
   Example:
-    export TEXT_AID_TOO_EDITOR="gvim"
+    export TEXT_AID_TOO_EDITOR="gvim -f"
     TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293
 
   Markdown (experimental):
@@ -89,7 +89,9 @@ wss  = new WSS port: args.port, host: config.host
 wss.on "connection", (ws) -> ws.on "message", handler ws
 
 getEditCommand = (filename) ->
-  "#{args.editor} #{filename}"
+  command = if 0 <= args.editor.indexOf "%s" then args.editor.replace "%s", filename else "#{args.editor} #{filename}"
+  console.log "exec:", command
+  command
 
 handler = (ws) -> (message) ->
   request = JSON.parse message

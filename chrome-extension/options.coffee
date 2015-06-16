@@ -15,8 +15,14 @@ document.addEventListener "DOMContentLoaded", ->
 
   maintainServerCommand = ->
     command = "\n"
-    command += " export TEXT_AID_TOO_SECRET=\"#{escape secretElement.value.trim()}\"\n" if secretElement.value.trim()
-    command += " text-aid-too --port #{portElement.value.trim()}\n"
+    command += " # Set your editor, something like...\n"
+    command += " export TEXT_AID_TOO_EDITOR=\"gvim -f\"\n\n"
+    command += " export TEXT_AID_TOO_SECRET=\"#{escape secretElement.value.trim()}\"\n\n" if secretElement.value.trim()
+    command +=
+      if portElement.value.trim() == Common.default.port
+        " text-aid-too\n"
+      else
+        " text-aid-too --port #{portElement.value.trim()}\n"
     command += "\n"
     commandElement.textContent = command
 
@@ -43,7 +49,7 @@ document.addEventListener "DOMContentLoaded", ->
           element.addEventListener "keydown", (event) ->
             element.blur() if event.keyCode == 27
 
-          element.addEventListener "keyup", maintainServerCommand
+          element.addEventListener "change", maintainServerCommand
 
   chrome.storage.sync.get "key", (items) ->
     unless chrome.runtime.lastError
@@ -77,6 +83,7 @@ document.addEventListener "DOMContentLoaded", ->
           $("setKey").value = "Set keyboard shortcut"
 
         window.addEventListener "keydown", keydown = (event) ->
+          return if event.repeat
           if event.keyCode not in [16..18] # Ctrl, Alt and Shift.
             batchUpdate = true
             $(k).checked = event[k] for k in keys

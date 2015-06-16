@@ -1,0 +1,3 @@
+
+run-server:
+	cd ..; make $@
