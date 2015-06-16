@@ -166,3 +166,12 @@ Options:
   --editor    [default: "urxvt -T textaid -geometry 100x30+80+20 -e vim"]
   --markdown  [default: false]
 ```
+
+### Release Notes
+
+Server version 1.1.4:
+- Add replacement of `%s` in the editor command (if present) with the file
+  name; otherwise the file name is simply appended to the editor command.
+
+Previous versions:
+- Lost on the mists of time.
