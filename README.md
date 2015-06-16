@@ -169,6 +169,9 @@ Options:
 
 ### Release Notes
 
+Extension version 1.1.1:
+- Tweaks to the options page.
+
 Server version 1.1.4:
 - Add replacement of `%s` in the editor command (if present) with the file
   name; otherwise the file name is simply appended to the editor command.

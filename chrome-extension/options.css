@@ -59,6 +59,6 @@ pre, code, .code, #status {
   background: #eeeeee;
 }
 
-#statusWrapper {
+#statusWrapper, #defaultKey {
    float: right;
 }

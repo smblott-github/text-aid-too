@@ -23,6 +23,7 @@
           <td class="optionName">Keyboard shortcut</td>
           <td>
             <input type="checkbox" id="ctrlKey" value="false" /><code>Control</code>
+            <span id="defaultKey">[ The default is <code>Ctrl-;</code> ]</span>
           </td>
         </tr>
         <tr>
@@ -55,7 +56,7 @@
       <br />
 
       <p>
-        Server command: <span id="statusWrapper">Server status: <span id="status">?</span></span>
+        Server set up: <span id="statusWrapper">Server status: <span id="status">?</span></span>
         <ul>
           <pre id = "command"></pre>
         </ul>
@@ -66,7 +67,9 @@
         <ul>
           <li>
             This extension does nothing on its own; you also need to install and run the
-            <code>text-aid-too</code> server.  See the project's home page (linked below) for details.
+            <code>text-aid-too</code> server.  See the project's <a
+              href="https://github.com/smblott-github/text-aid-too#text-aid-too" target="_blank">home page</a>
+            for details.
           </li>
           <li>
             There's no need to save your changes; just use <code>Escape</code> to blur the inputs above.
@@ -78,19 +81,23 @@
           </li>
 
           <li>
-            Set <code>Secret</code> to any secret you provided to the server.  If you provide a secret to the
-            server (via the <code>$TEXT_AID_TOO_SECRET</code> environment variable), then it will ignore
-            requests that don't contain that secret.
+            Set <code>Secret</code> to a secret value which you provide to the server (optional, but
+            recommended). If the server uses a
+            secret, then it ignores requests which do not include that secret.
+            See <a href="https://github.com/smblott-github/text-aid-too#security" target="_blank">here</a> for
+                                                                                  details.
           </li>
 
           <li>
-            The default keyboard shortcut is <code>&lt;Ctrl-;&gt;</code>, but you can set your own shortcut
+            The default keyboard shortcut is <code>Ctrl-;</code>, but you can set your own shortcut
             above.
           </li>
 
           <li>
-            Please provide feedback and comments on the project's <a
-              href="https://github.com/smblott-github/text-aid-too#text-aid-too" target="_blank">home page</a>.
+            For more information, see the project's
+            <a href="https://github.com/smblott-github/text-aid-too#text-aid-too" target="_blank">home page</a>.
+            Please report issues
+            <a href="https://github.com/smblott-github/text-aid-too/issues" target="_blank">here</a>.
           </li>
 
           <li>
