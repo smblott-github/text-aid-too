@@ -89,6 +89,13 @@ The editor command is set when the server is launched.  Use one of...
     export TEXT_AID_TOO_EDITOR="urxvt -T textaid -geometry 100x30+80+20 -e vim"
     text-aid-too
 
+    # Normally, the file name is just appended to the editor command.
+    # However, %s in the editor command (if present) is replaced with the
+    # file name instead.
+    # Like this...
+    export TEXT_AID_TOO_EDITOR="pantheon-terminal -e 'vim %s'"
+    text-aid-too
+
 The command line takes priority.
 
 ### Port
