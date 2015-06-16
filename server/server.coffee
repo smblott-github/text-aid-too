@@ -54,7 +54,7 @@ helpText =
     TEXT_AID_TOO_SECRET=hul8quahJ4eeL1Ib text-aid-too --port 9293
 
   Markdown (experimental):
-    With the "--markdown" flag, text-aid-too tries to find naked text
+    With the "--markdown" flag, text-aid-too tries to find non-HTML
     paragraphs in HTML texts and parses them as markdown.  This only
     applies to texts from contentEditable elements (e.g. the GMail
     compose window).
@@ -140,10 +140,10 @@ handler = (ws) -> (message) ->
         sendText = (continuation = null) ->
           fs.readFile filename, "utf8", (error, data) ->
             return exit() if error
-            console.log "  send:", filename
+            console.log "  send: #{filename} [#{data.length}]"
             data = data.replace /\n$/, ""
             request.text = request.originalText = data
-            request.text = formatParagraphs data if request.isContentEditable
+            request.text = formatMarkdown data if request.isContentEditable and args.markdown
             sendResponse request, continuation
 
         monitor = watchr.watch
@@ -166,27 +166,31 @@ handler = (ws) -> (message) ->
   else
     console.log "error; unknown request:", request
 
-formatParagraphs = do ->
-  isHTML = do ->
-    re = /<\/?[a-zA-Z]+/
-    (text) -> re.test text
+markdownToHtml = (text) ->
+  try
+    html.prettyPrint markdown.markdown.toHTML text
+  catch
+    text
 
-  isWhitespace = do ->
-    re = /^\s*$/
-    (text) -> re.test text
+# This is best-effort markdown handling.  Paragraphs are separated by "\n\n".  We collect together as many
+# paragraphs which don't seem to contain HTML as we can, and process them as markdown. Everything else just gets
+# passed through.
+formatMarkdown = (text) ->
+  [ output, texts, input ] = [ [], [], text.split("\n\n").reverse() ]
 
-  (text) ->
-    paragraphs =
-      for paragraph in text.split "\n\n"
-        if isHTML(paragraph) or isWhitespace paragraph
-          paragraph
-        else if args.markdown
-          try
-            html.prettyPrint markdown.markdown.toHTML paragraph
-          catch
-            paragraph
-        else
-          paragraph
+  flushMarkdown = ->
+    if 0 < texts.length
+      output.push markdownToHtml texts.join "\n\n"
+      texts = []
 
-    paragraphs.join "\n\n"
+  while 0 < input.length
+    paragraph = input.pop()
+    if /<\/?[a-zA-Z]+/.test paragraph
+      flushMarkdown()
+      output.push paragraph
+    else
+      texts.push paragraph
+
+  flushMarkdown()
+  output.join "\n\n"
 
