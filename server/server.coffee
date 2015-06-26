@@ -33,7 +33,7 @@ for module in [
 config =
   port: "9293"
   host: "localhost"
-  editor: "urxvt -T textaid -geometry 100x30+80+20 -e vim"
+  editor: "gvim -f"
 
 defaultEditor =
   if process.env.TEXT_AID_TOO_EDITOR

@@ -163,6 +163,9 @@ Options:
 ### Release Notes
 
 Server version 1.1.5:
+- Change default editor to `gvim -f`.
+
+Server version 1.1.5:
 - Better (although not perfect) separation of Markdown from HTML.
 - Removed documentation of `%s` replacement (see 1.1.4, below).  This may be
   removed entirely soon, it's not working correctly
