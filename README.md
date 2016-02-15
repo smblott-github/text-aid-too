@@ -67,6 +67,44 @@ Then, launch the server; which might be something like...
   whereas *Text-aid-too* uses its own web-socket based protocol.  This allows
   it to update the input's contents on-the-fly (that is, on file write).
 
+#### Automatically run as a background service
+
+On GNU/Linux, Text-Aid-Too can be packaged in a systemd user service, so it is
+automatically started as a background process when you log in.
+
+Create the unit file, and customize with your favorite editor:
+
+    mkdir -p ~/.config/systemd/user
+    cat >~/.config/systemd/user/text-aid-too.service <<EOF
+    [Unit]
+    Description=Text-Aid-Too
+    
+    [Service]
+    ExecStart=/usr/bin/text-aid-too
+    Environment="TEXT_AID_TOO_SECRET=something-secret"
+    Environment="TEXT_AID_TOO_EDITOR=sakura -e nvim"
+    Environment="COLORTERM=1"
+    Environment="DISPLAY=:0"
+    
+    [Install]
+    WantedBy=default.target
+    EOF
+
+Protect your unit file, since it contains the password:
+
+    chmod 0600 ~/.config/systemd/user/text-aid-too.service
+
+Enable the service for automatic startup:
+
+    systemctl --user daemon-reload
+    systemctl --user start text-aid-too
+    systemctl --user enable text-aid-too
+
+Text-Aid-Too is now running as a service (and will be upon future boots).
+If needed, logs can be seen using:
+
+    journalctl --user-unit text-aid-too -f
+
 #### The Hard Way
 
 1. Clone the repo.
