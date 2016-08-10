@@ -63,6 +63,8 @@ Then, launch the server; which might be something like...
   set it to `gvim -f` which runs in the foreground (or the equivalent for your
   favourite editor) instead.
 
+- If you get an error regarding the "d-bus daemon not running", then see [this post](https://github.com/smblott-github/text-aid-too/issues/5).
+
 - *Text-aid-too* will not work with other *text-aid* servers.  Those use HTTP,
   whereas *Text-aid-too* uses its own web-socket based protocol.  This allows
   it to update the input's contents on-the-fly (that is, on file write).
