@@ -129,6 +129,11 @@ The editor command is set when the server is launched.  Use one of...
     export TEXT_AID_TOO_EDITOR="urxvt -T textaid -geometry 100x30+80+20 -e vim"
     text-aid-too
 
+Example of usage with a GUI editor:
+
+    export TEXT_AID_TOO_EDITOR="bash -c 'pantheon-terminal -e \"nvim $1\"' --"
+    text-aid-too
+
 The command line takes priority.
 
 ### Port
