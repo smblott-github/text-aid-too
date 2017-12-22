@@ -133,8 +133,12 @@ Example of usage with a GUI editor:
 
     export TEXT_AID_TOO_EDITOR="bash -c 'pantheon-terminal -e \"nvim $1\"' --"
     text-aid-too
+    
+Using `gnome-terminal` will not work, because it forks. `konsole` works:
 
-The command line takes priority.
+    text-aid-too --editor "konsole -e vim"
+
+If an editor is passed on the commmand line and an environment variable, the command line takes priority.
 
 ### Port
 
