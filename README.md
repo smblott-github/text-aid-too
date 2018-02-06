@@ -133,8 +133,13 @@ Example of usage with a GUI editor:
 
     export TEXT_AID_TOO_EDITOR="bash -c 'pantheon-terminal -e \"nvim $1\"' --"
     text-aid-too
-    
-Using `gnome-terminal` will not work, because it forks. `konsole` works:
+
+(Apparently)[https://github.com/smblott-github/text-aid-too/issues/11], `gnome-terminal` works as follows:
+
+    export TEXT_AID_TOO_EDITOR="gnome-terminal --disable-factory -x /usr/bin/vim -f \"%s\""
+    text-aid-too
+
+`konsole` works:
 
     text-aid-too --editor "konsole -e vim"
 
