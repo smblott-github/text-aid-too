@@ -135,7 +135,7 @@ handler = (ws) -> (message) ->
 
       fs.writeFile filename, (request.originalText ? request.text), (error) ->
         return exit() if error
-        onExit.push -> fs.unlink filename
+        onExit.push -> fs.unlink filename, ->
 
         sendText = (continuation = null) ->
           fs.readFile filename, "utf8", (error, data) ->
